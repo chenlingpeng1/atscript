@@ -1,0 +1,10 @@
+function void Main()
+{
+   var CRegKey MyReg;
+
+   MyReg.SetRegStrValue( "HKEY_CURRENT_USER" , "software" , "abc" , "222" ); 
+   MessageBox( MyReg.GetRegStrValue( "HKEY_CURRENT_USER" , "software" , "abc" , "333" ) );
+
+   MyReg.SetRegDWordValue( "HKEY_CURRENT_USER" , "software" , "ats" , "222" );
+   MessageBox( MyReg.GetRegDWordValue( "HKEY_CURRENT_USER" , "software" , "ats" , "333" ) );
+}

@@ -1,0 +1,6 @@
+function void Main() 
+{
+  var CMyClass MyClass;
+  MyClass.SetData( "abc" );
+  MessageBox( MyClass.GetData() );
+}

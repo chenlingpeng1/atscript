@@ -1,0 +1,17 @@
+function void Main()
+{
+  var string a;
+  a = "red";
+  switch( a )
+  {
+	case "red":
+		MessageBox( "red" );
+                break;
+	case "green"  
+		MessageBox("green");
+                break;
+	default: 
+		MessageBox("other");
+                break;
+  }
+}

@@ -1,0 +1,8 @@
+function void Main()
+{
+  var string a;
+  var IAtsObject subobj;
+
+  subobj = myobj.CreateSubObj();
+  MessageBox( subobj.GetMyName() );
+}

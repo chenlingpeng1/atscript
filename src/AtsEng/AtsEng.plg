@@ -1,0 +1,66 @@
+<html>
+<body>
+<pre>
+<h1>Build Log</h1>
+<h3>
+--------------------Configuration: AtsEng - Win32 Release--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating temporary file "C:\Users\Dell\AppData\Local\Temp\RSPD324.tmp" with contents
+[
+/nologo /MD /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "ATS_EXPORTS" /D "_AFXDLL" /D "_USE_CSTRING" /Fp"Release/AtsEng.pch" /YX /Fo"Release/" /Fd"Release/" /FD /c 
+"E:\VcProgram\InsAide\AtsEng\AtsEngine.cpp"
+"E:\VcProgram\InsAide\AtsEng\AtsParam.cpp"
+]
+Creating command line "cl.exe @C:\Users\Dell\AppData\Local\Temp\RSPD324.tmp" 
+Creating temporary file "C:\Users\Dell\AppData\Local\Temp\RSPD325.tmp" with contents
+[
+/nologo /out:"Release\AtsEng.lib" 
+.\Release\AtsBaseFun.obj
+.\Release\AtsEngine.obj
+.\Release\AtsExpExt.obj
+.\Release\AtsExpMgr.obj
+.\Release\AtsExpValue.obj
+.\Release\AtsFile.obj
+.\Release\AtsObj.obj
+.\Release\AtsObject.obj
+.\Release\AtsParam.obj
+.\Release\AtsRegKey.obj
+.\Release\AtsSegIns.obj
+.\Release\AtsSegmentItem.obj
+.\Release\AtsSentence.obj
+.\Release\AtsSentIns.obj
+.\Release\AtsValue.obj
+.\Release\AtsVarItem.obj
+.\Release\BoolObj.obj
+.\Release\DllModule.obj
+.\Release\DllModuleObj.obj
+.\Release\DoubleObj.obj
+.\Release\IntObj.obj
+.\Release\JfScriptEngineMgr.obj
+.\Release\MyMemFile.obj
+.\Release\RegKeyObj.obj
+.\Release\ScriptExpExt.obj
+.\Release\ScriptLine.obj
+.\Release\SentenceSite.obj
+.\Release\StdAfx.obj
+.\Release\StringObj.obj
+.\Release\ValueSet.obj
+.\Release\WndParam.obj
+.\Release\WSModule.obj
+.\Release\WSModuleObj.obj
+]
+Creating command line "link.exe -lib @C:\Users\Dell\AppData\Local\Temp\RSPD325.tmp"
+<h3>Output Window</h3>
+Compiling...
+AtsEngine.cpp
+AtsParam.cpp
+Creating library...
+
+
+
+<h3>Results</h3>
+AtsEng.lib - 0 error(s), 0 warning(s)
+</pre>
+</body>
+</html>

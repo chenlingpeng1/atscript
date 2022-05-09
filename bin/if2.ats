@@ -1,0 +1,22 @@
+function void Main()
+{
+  var int a;
+  a = 3;
+  if( a == 2 )
+	MessageBox("2");
+  else if( a == 3 )
+  {
+       MessageBox("3");
+      if( a == 2 )
+        MessageBox("abc" );
+      else
+      {
+        MessageBox("ee");
+        MessageBox("de");
+       }
+  }
+  else
+      MessageBox("other" );
+
+  MessageBox("end");
+}

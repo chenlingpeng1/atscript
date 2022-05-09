@@ -1,0 +1,6 @@
+function void Main()
+{ 
+  var string a;
+  a = myobj.getname();
+  MessageBox(a);
+}

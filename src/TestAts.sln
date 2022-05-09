@@ -1,0 +1,53 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestAts", "TestAts.vcxproj", "{A6EE54A8-5BD6-4FB8-9056-AF5EB953BFB5}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AtsEng", "AtsEng\AtsEng.vcxproj", "{FBE053E3-1A50-406D-8740-5B0E40907E0F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Enu Release|x86 = Enu Release|x86
+		Enu Static Release|x86 = Enu Static Release|x86
+		Release MinSize|x86 = Release MinSize|x86
+		Release|x86 = Release|x86
+		Static Release|x86 = Static Release|x86
+		Template|x86 = Template|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A6EE54A8-5BD6-4FB8-9056-AF5EB953BFB5}.Debug|x86.ActiveCfg = Debug|Win32
+		{A6EE54A8-5BD6-4FB8-9056-AF5EB953BFB5}.Debug|x86.Build.0 = Debug|Win32
+		{A6EE54A8-5BD6-4FB8-9056-AF5EB953BFB5}.Enu Release|x86.ActiveCfg = Release|Win32
+		{A6EE54A8-5BD6-4FB8-9056-AF5EB953BFB5}.Enu Release|x86.Build.0 = Release|Win32
+		{A6EE54A8-5BD6-4FB8-9056-AF5EB953BFB5}.Enu Static Release|x86.ActiveCfg = Release|Win32
+		{A6EE54A8-5BD6-4FB8-9056-AF5EB953BFB5}.Enu Static Release|x86.Build.0 = Release|Win32
+		{A6EE54A8-5BD6-4FB8-9056-AF5EB953BFB5}.Release MinSize|x86.ActiveCfg = Release|Win32
+		{A6EE54A8-5BD6-4FB8-9056-AF5EB953BFB5}.Release MinSize|x86.Build.0 = Release|Win32
+		{A6EE54A8-5BD6-4FB8-9056-AF5EB953BFB5}.Release|x86.ActiveCfg = Release|Win32
+		{A6EE54A8-5BD6-4FB8-9056-AF5EB953BFB5}.Release|x86.Build.0 = Release|Win32
+		{A6EE54A8-5BD6-4FB8-9056-AF5EB953BFB5}.Static Release|x86.ActiveCfg = Release|Win32
+		{A6EE54A8-5BD6-4FB8-9056-AF5EB953BFB5}.Static Release|x86.Build.0 = Release|Win32
+		{A6EE54A8-5BD6-4FB8-9056-AF5EB953BFB5}.Template|x86.ActiveCfg = Release|Win32
+		{A6EE54A8-5BD6-4FB8-9056-AF5EB953BFB5}.Template|x86.Build.0 = Release|Win32
+		{FBE053E3-1A50-406D-8740-5B0E40907E0F}.Debug|x86.ActiveCfg = Debug|Win32
+		{FBE053E3-1A50-406D-8740-5B0E40907E0F}.Debug|x86.Build.0 = Debug|Win32
+		{FBE053E3-1A50-406D-8740-5B0E40907E0F}.Enu Release|x86.ActiveCfg = Enu Release|Win32
+		{FBE053E3-1A50-406D-8740-5B0E40907E0F}.Enu Release|x86.Build.0 = Enu Release|Win32
+		{FBE053E3-1A50-406D-8740-5B0E40907E0F}.Enu Static Release|x86.ActiveCfg = Enu Static Release|Win32
+		{FBE053E3-1A50-406D-8740-5B0E40907E0F}.Enu Static Release|x86.Build.0 = Enu Static Release|Win32
+		{FBE053E3-1A50-406D-8740-5B0E40907E0F}.Release MinSize|x86.ActiveCfg = Release MinSize|Win32
+		{FBE053E3-1A50-406D-8740-5B0E40907E0F}.Release MinSize|x86.Build.0 = Release MinSize|Win32
+		{FBE053E3-1A50-406D-8740-5B0E40907E0F}.Release|x86.ActiveCfg = Release|Win32
+		{FBE053E3-1A50-406D-8740-5B0E40907E0F}.Release|x86.Build.0 = Release|Win32
+		{FBE053E3-1A50-406D-8740-5B0E40907E0F}.Static Release|x86.ActiveCfg = Static Release|Win32
+		{FBE053E3-1A50-406D-8740-5B0E40907E0F}.Static Release|x86.Build.0 = Static Release|Win32
+		{FBE053E3-1A50-406D-8740-5B0E40907E0F}.Template|x86.ActiveCfg = Template|Win32
+		{FBE053E3-1A50-406D-8740-5B0E40907E0F}.Template|x86.Build.0 = Template|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

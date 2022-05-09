@@ -1,0 +1,8 @@
+#Include "Function.vbs" VbScript  
+
+function void Main() 
+{
+    var int abc;
+    abc=CallVBSFunction( "xx" , 4,1 );
+    MessageBox( abc );
+}

@@ -1,0 +1,6 @@
+function void Main()
+{ 
+  var CValueSet a;
+  a.SetValue("abc","123");
+  MessageBox( a.GetValue("abc") );
+}

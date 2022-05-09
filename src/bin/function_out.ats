@@ -1,0 +1,12 @@
+function void Main()
+{ 
+  var string a;
+  a = "Atsript";
+  aa( a, "abc" );
+  MessageBox( a );
+}
+
+function void aa( out string x , string y ) 
+{
+   x = x +y  
+}

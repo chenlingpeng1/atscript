@@ -1,0 +1,8 @@
+function void Main()
+{ 
+	var int a;
+	for( a = 2 ; a < 6 ; a++ )
+   		MessageBox(a);
+
+	MessageBox("end");
+}

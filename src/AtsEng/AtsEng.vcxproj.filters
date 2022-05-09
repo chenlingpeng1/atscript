@@ -1,0 +1,227 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{78d0f1d9-6743-438d-bc74-9b18722df35b}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;rc;def;r;odl;idl;hpj;bat</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{735ca2ff-6d8f-4cce-b53c-072cee91d24f}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="AtsBaseFun.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AtsEngine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AtsExpExt.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AtsExpMgr.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AtsExpValue.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AtsFile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AtsObj.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AtsObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AtsParam.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AtsRegKey.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AtsSegIns.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AtsSegmentItem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AtsSentence.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AtsSentIns.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AtsValue.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AtsVarItem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BoolObj.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DllModule.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DllModuleObj.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DoubleObj.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="IntObj.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="JfScriptEngineMgr.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MyMemFile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RegKeyObj.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ScriptExpExt.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ScriptLine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SentenceSite.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StdAfx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StringObj.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ValueSet.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="WndParam.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="WSModule.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="WSModuleObj.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="AtsBaseFun.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AtsCommDef.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AtsDef.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AtsEngine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AtsExpExt.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AtsExpMgr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AtsExpValue.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AtsFile.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AtsObj.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AtsObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AtsObjPtr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AtsParam.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AtsRegKey.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AtsSegIns.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AtsSegmentItem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AtsSentence.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AtsSentIns.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AtsString.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AtsValue.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AtsVarItem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BoolObj.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DllModule.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DllModuleObj.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DoubleObj.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IntObj.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="JfScriptEngineMgr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MyMemFile.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RegKeyObj.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ScriptExpExt.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ScriptLine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SentenceSite.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StdAfx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StringObj.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ValueSet.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="WndParam.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="WSModule.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="WSModuleObj.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

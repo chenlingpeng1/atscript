@@ -1,0 +1,43 @@
+
+Section Main 
+var @a as atsint
+For @a = 1 To 3 
+	msgbox @a
+ if @a == 2 then
+   EXIT for
+end if
+
+NEXT
+msgbox "abc"
+End Section
+
+Section Main 
+var @a as atsint
+For @a = 1 To 3 
+	msgbox @a
+ if @a == 3 then
+   msgbox "ok"
+end if 
+Next
+End Section
+
+Section Main 
+var @Myvar as atsstring
+@myvar = "abc"
+switch @MyVar
+           Case "red"   
+		msgbox "red"
+           Case "green"  
+		msgbox "green"
+           Case "blue"  
+		msgbox "blue"
+           Case Else  
+		MsgBox "选择另一种颜色"
+end switch 
+End Section
+
+For @a = 1 To end 5
+[statements]
+[Exit For]
+[statements]
+Next

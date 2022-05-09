@@ -1,0 +1,10 @@
+function void Main()
+{
+   var int a;
+   a = 1;
+   while( a < 5 )
+   {
+     MessageBox( a );
+     a++;
+   }
+}

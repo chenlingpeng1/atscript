@@ -1,0 +1,4 @@
+function void Main() 
+{
+ MessageBox(  Math.pow(2,3) );
+}

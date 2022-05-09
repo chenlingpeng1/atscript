@@ -1,0 +1,9 @@
+function void Main()
+{ 
+    MessageBox( xx("abc" ,"123") );
+}
+
+function string xx( string a , string b )
+{
+    return a + b;
+}

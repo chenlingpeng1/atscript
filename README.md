@@ -85,47 +85,23 @@ Atscript script language, with its powerful extension ability and flexible synta
 
 - mail:[905309882@qq.com](mailto:905309882@qq.com).
 
-##Successful cases
+## Successful cases
 - Nextinstaller
-   Nextinstaller is a powerful installation package making tool, which internally uses the atscript script engine as the driver of the installation wizard
+   Nextinstaller is a powerful installation package making tool, which internally uses the atscript script engine as the driver of the installation wizard.
    website: [http://ni.wanzqh.com](http://ni.wanzqh.com)
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- firspider
+   A two-dimensional game engine running on the mobile phone is used for the production of small games, which is conducive to the learning and Enlightenment of game development. Atscript script is used internally to drive the game.
+   website: [http://firespider.wanzqh.com](http://firespider.wanzqh.com)
 
+- quickspider
+   Use atscript as a page capture engine
+
+- quickdove
+   An enterprise instant messaging tool, which internally uses atscript as the script developed by the plug-in, and can be used to integrate with the third-party user authentication system.
+   website: http://www.quickdove.com](http://www.quickdove.com)
 
 - **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[CMS Max](https://www.cmsmax.com/)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
-- **[Romega Software](https://romegasoftware.com)**
 
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
 
 ## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+The code can be used for learning and research or for the development of shared software. If it is to be used in commercial applications, it needs the authorization of the author [905309882@qq.com](mailto:905309882@qq.com).

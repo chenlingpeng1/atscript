@@ -7,11 +7,16 @@ Design purpose: providing script support for applications through embedded scrip
 Atscript script language, with its powerful extension ability and flexible syntax structure class JavaScript, makes it possible to provide script support for applications, so as to develop mixed languages and realize extensibility and flexibility customizable and effective solutions. In consideration of stability and development time constraints, developers tend to embed the existing script engine to provide script support for applications,For example, the embedded Python engine provides Python script support for the application, or uses the ActiveX scripting technology provided by Microsoft to provide corresponding script support for the embedded VBScript engine or JavaScript engine of the application.However, the flexibility of this method is poor, and the application must accept the volume and performance requirements of the existing script engine, which is for applications running under low hardware conditions or small applications that only require simple rule calculation,This method has no advantage in efficiency. Moreover, unified deployment is not convenient. Therefore, we need a lightweight script engine, which can be easily embedded into the code. Aiming at the above problems, this paper designs a script by ourselves.Based on atscript language, a lightweight script engine of atscript is developed and implemented. The script engine is embedded in C + +, Java, c# And other applications. The syntax of atscript language is simple and inherited from non professional programmers JavaScript language, which has a high reputation in, and draws lessons from some functions of c# language, so that users can focus on problem solving rather than grammar learning.
 
 
-## Learning Laravel
+## Specific use of atscript
+### 1 Embed atscript into code
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+	CAtsEngine Eng;
+	Eng.LoadScript( "function void Main() \r\n{\r\n MessageBox( \"hello\" ); \r\n}" );
+	if( !Eng.RunSegment( "Main") )	
+	{
+		strPrompt.Format("Script is error, ErrorCode=%d,Line = %d,ErrorWord=%s" , Eng.m_nLastErrorCode , Eng.m_nErrorLine , Eng.m_strErrorWord );
+		AfxMessageBox( strPrompt );
+	}
 
 ## Laravel Sponsors
 

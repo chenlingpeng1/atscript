@@ -102,7 +102,7 @@ Atscript script language, with its powerful extension ability and flexible synta
 - quickdove
    An enterprise instant messaging tool, which internally uses atscript as the script developed by the plug-in, and can be used to integrate with the third-party user authentication system.
 
-   website: http://www.quickdove.com](http://www.quickdove.com)
+   website: [http://www.quickdove.com](http://www.quickdove.com)
 
 
 ## License

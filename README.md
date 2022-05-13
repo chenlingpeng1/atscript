@@ -40,9 +40,56 @@ Atscript script language, with its powerful extension ability and flexible synta
            MessageBox(a);
        }
 
-### Premium Partners
+### 3 Extension constants
+	CAtsEngine		Eng;
+	CMyAtsObj * pNewObj = new CMyAtsObj;
+	pNewObj->m_pEngine = &Eng;
+	Eng.SetConstVar("SS_INSTALL" , "1", ATSVAR_TYPE_INT );
+	Eng.LoadScript( script );
+	if( !Eng.RunSegment( "Main") )	
+	{
+		strPrompt.Format("Script is error, ErrorCode=%d,Line = %d,ErrorWord=%s" , Eng.m_nLastErrorCode , Eng.m_nErrorLine , Eng.m_strErrorWord );
+		AfxMessageBox( strPrompt );
+	}
+     
+       Where SS_INSTALL is the user's extension constant. The following is the reference script:
+       function void Main()
+       { 
+           var int a;
+           a = SS_INSTALL;
+           MessageBox(a);
+       }
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
+### 4 Extend your own class
+	CAtsEngine		Eng;
+
+	CMyAtsObj * pNewObj = new CMyAtsObj;
+	pNewObj->m_pEngine = &Eng;
+	Eng.AddClassTemplate( new CMyClass );
+	Eng.LoadScript( script );
+	if( !Eng.RunSegment( "Main") )	
+	{
+		strPrompt.Format("Script is error, ErrorCode=%d,Line = %d,ErrorWord=%s" , Eng.m_nLastErrorCode , Eng.m_nErrorLine , Eng.m_strErrorWord );
+		AfxMessageBox( strPrompt );
+	}
+
+     Where CMyClass is the user's extended class. The following is the reference script:
+     function void Main() 
+     {
+  	var CMyClass MyClass;
+  	MyClass.SetData( "abc" );
+  	MessageBox( MyClass.GetData() );
+      }
+
+## Support
+
+- mail:[905309882@qq.com](mailto:905309882@qq.com).
+
+##Successful cases
+- Nextinstaller
+   Nextinstaller is a powerful installation package making tool, which internally uses the atscript script engine as the driver of the installation wizard
+   website: [http://ni.wanzqh.com](http://ni.wanzqh.com)
+- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
 - [Powerful dependency injection container](https://laravel.com/docs/container).
 - Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
 - Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).

@@ -18,9 +18,27 @@ Atscript script language, with its powerful extension ability and flexible synta
 		AfxMessageBox( strPrompt );
 	}
 
-## Laravel Sponsors
+### 2 Extend users' own objects to realize function integration
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+	CAtsEngine		Eng;
+	CMyAtsObj * pNewObj = new CMyAtsObj;
+	pNewObj->m_pEngine = &Eng;
+	Eng.AddObjIns( "MyObj" , pNewObj );
+	Eng.LoadScript( script );
+	if( !Eng.RunSegment( "Main") )	
+	{
+		strPrompt.Format("Script is error, ErrorCode=%d,Line = %d,ErrorWord=%s" , Eng.m_nLastErrorCode , Eng.m_nErrorLine , Eng.m_strErrorWord );
+		AfxMessageBox( strPrompt );
+	}
+
+	Among them, cmyatsobj is an extension class written by users themselves. Through their own extension, function integration can be easily realized. The following is the reference script:
+
+	function void Main()
+       { 
+           var string a;
+           a = myobj.getname();
+           MessageBox(a);
+       }
 
 ### Premium Partners
 

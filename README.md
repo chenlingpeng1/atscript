@@ -104,6 +104,8 @@ Atscript script language, with its powerful extension ability and flexible synta
 
    website: [http://www.quickdove.com](http://www.quickdove.com)
 
+## Other language
+   If you need atscript in c#, Java, IOS, Android and other languages, please contact the author
 
 ## License
 The code can be used for learning and research or for the development of shared software. If it is to be used in commercial applications, it needs the authorization of the author [905309882@qq.com](mailto:905309882@qq.com).

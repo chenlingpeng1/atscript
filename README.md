@@ -109,3 +109,9 @@ Atscript script language, with its powerful extension ability and flexible synta
 
 ## License
 The code can be used for learning and research or for the development of shared software. If it is to be used in commercial applications, it needs the authorization of the author [905309882@qq.com](mailto:905309882@qq.com).
+
+
+## Atscript 2.0
+
+Atscript 2.0 has completed its development and commercial application, and its internal compiler is embedded to make it more efficient it improves the execution efficiency of the code, solves several key running bugs in 1.8, and independently opens the condition judge and formula calculation products to facilitate users in it is used independently in the application, but the source code cannot be shared. If necessary, please contact the author: 905309882@qq.com
+

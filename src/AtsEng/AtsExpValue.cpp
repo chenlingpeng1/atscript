@@ -22,7 +22,6 @@ CAtsExpOpItem::CAtsExpOpItem()
 CAtsExpOpItem::~CAtsExpOpItem()
 {
 }
-
 bool CAtsExpOpItem::IsMastCal()
 {
 	if( GetOPLevel() == 1 )
@@ -30,11 +29,6 @@ bool CAtsExpOpItem::IsMastCal()
 	else
 		return false;
 }
-
-//======================================
-// 得到 OP 的等级，1 为马上要执行的 OP
-// 是否为要马上进行计划的符号
-//======================================
 int CAtsExpOpItem::GetOPLevel()
 {
 	return CAtsBaseFun::GetOPLevel( m_nType , m_strName );

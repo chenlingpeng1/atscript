@@ -54,8 +54,6 @@ CAtsEngine::CAtsEngine()
 	AddClassTemplate( new CBoolObj );
 	AddClassTemplate( new CWSModuleObj );		
 	AddClassTemplate( new CDllModuleObj );
-
-	// 向引擎中加入常量
 	SetConstVar( "true"  , "1" , ATSVAR_TYPE_BOOL);
 	SetConstVar( "false" , "0" , ATSVAR_TYPE_BOOL);
 }
@@ -422,7 +420,6 @@ void CAtsEngine::RunCmdLine(CAtsSegIns *pCurSegIns , CAtsString strCmdLine , BOO
 			pSentIns->m_nRunCount++;
 			RunCmdLine_simple( pCurSegIns , pSentence->m_strNextCmd , bExit);
 		}
-		
 		bRet = CheckCondition( pSentence->m_strCondition, pCurSegIns  );
 		CHECK_ERROR()
 		if( bRet )
@@ -694,61 +691,7 @@ BOOL CAtsEngine::SetDataEx( CAtsString strVarName , CAtsString strExp , CAtsSegI
 		SetVar( strVarName , &pVarItem->m_vData , pSegIns );
 		return true;
 	}
-	else if( strOP == "*=" )
-	{
-		strExp = strExp.Mid(2);
-		CAtsValue		vReturn;
-		Jfe.m_pFEExt = &m_ExpExt;
-		m_ExpExt.m_pSegIns = pSegIns;
-		bRet = Jfe.Computer( (LPCTSTR)strExp , &vReturn );
-		if( Jfe.m_bIsError  )
-		{
-			m_bIsError = Jfe.m_bIsError;
-			return false;
-		}
-
-		pVarItem = GetVarItem( pSegIns , strVarName );
-		pVarItem->m_vData.MultiplyData( vReturn.GetdData() );
-		SetVar( strVarName , &pVarItem->m_vData , pSegIns );
-		return true;
-	}
-	else if( strOP == "%=" )
-	{
-		strExp = strExp.Mid(2);
-		CAtsValue		vReturn;
-		Jfe.m_pFEExt = &m_ExpExt;
-		m_ExpExt.m_pSegIns = pSegIns;
-		bRet = Jfe.Computer( (LPCTSTR)strExp , &vReturn );
-		if( Jfe.m_bIsError  )
-		{
-			m_bIsError = Jfe.m_bIsError;
-			return false;
-		}
-
-		pVarItem = GetVarItem( pSegIns , strVarName );
-		pVarItem->m_vData.ModeData( vReturn.GetdData() );
-		SetVar( strVarName , &pVarItem->m_vData , pSegIns );
-		return true;
-	}
-	else if( strOP == "/=" )
-	{
-		strExp = strExp.Mid(2);
-		CAtsValue		vReturn;
-		Jfe.m_pFEExt = &m_ExpExt;
-		m_ExpExt.m_pSegIns = pSegIns;
-		bRet = Jfe.Computer( (LPCTSTR)strExp , &vReturn );
-		if( Jfe.m_bIsError  )
-		{
-			m_bIsError = Jfe.m_bIsError;
-			return false;
-		}
-
-		pVarItem = GetVarItem( pSegIns , strVarName );
-		pVarItem->m_vData.DivideData( vReturn.GetdData() ); 
-		SetVar( strVarName , &pVarItem->m_vData , pSegIns );
-		return true;
-	}
-
+	
 	strOP = strExp.Left(1);
 	if( strOP != "=" )
 		return false;

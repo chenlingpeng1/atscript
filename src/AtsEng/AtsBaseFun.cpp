@@ -14,22 +14,16 @@
 
 CAtsBaseFun::CAtsBaseFun()
 {
-
 }
-
 CAtsBaseFun::~CAtsBaseFun()
 {
-
 }
-
 CAtsString CAtsBaseFun::GetPathName( CAtsString strFileName )
 {
 	int			nPos;
 	CAtsString		strPathName;
-
 	if ( strFileName.IsEmpty() )
 		return	_T( "" );
-
 	nPos	= strFileName.ReverseFind( '\\' );
 	if ( nPos < 0 )
 		return	_T( "" );
@@ -129,7 +123,6 @@ CAtsString CAtsBaseFun::GenerateGUIDString()
 		StringFromGUID2(guid, sessionID, MAX_PATH);
 		strGUID = sessionID;
 	}
-
 	return strGUID;
 }
 

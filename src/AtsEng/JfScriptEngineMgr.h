@@ -19,7 +19,6 @@
 
 #define		ATSVAR_TYPE_STRING		(2)
 #define		ATSVAR_TYPE_INT			(3)
-
 #define		JFSCRIPT_ENGINE_NONE	(0)
 #define		JFSCRIPT_ENGINE_VBS		(1)
 #define		JFSCRIPT_ENGINE_JS		(2)
@@ -126,12 +125,7 @@ public:
 public:
 	void SetEngine( int nEngineType );
 	virtual ~CJfScriptEngineMgr();
-
-	// Singleton instantiator
 	static CJfScriptEngineMgr* Instance();
-
-	// Scripting members
-//	bool GetMethodNames( CStringArray &asData);
 	BOOL CallSimpleFun(CString strFunName , CJfScriptParams *pParam , CString &strReturn );
 	void AddExposedObjectPtr(CString newObjectName, IUnknown* newExposedObject);
 	void InitializeScriptEngine(int nEngineType = JFSCRIPT_ENGINE_NONE);
@@ -154,13 +148,9 @@ private:
 	IActiveScript*		m_iActiveScript;
 	IActiveScriptParse*	m_iActiveScriptParse;
 	IDispatch*			m_pScriptDispatch;
-
 	BOOL				m_bInitData;
 	int					m_nEngineType;
 };
-
-
-
 
 
 #endif // !defined(AFX_CJfScriptEngineMgr_H__0169D899_1CD0_11D3_A57C_00A0C9750ADE__INCLUDED_)

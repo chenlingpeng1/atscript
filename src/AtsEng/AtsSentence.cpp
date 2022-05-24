@@ -33,9 +33,6 @@ CAtsSentence::~CAtsSentence()
 	m_listSite.RemoveAll();
 }
 
-//===============================
-// ц╩сп {}
-//===============================
 BOOL CAtsSentence::IsNoBracket()
 {
 	if( m_nBeginPos == m_nEndPos )

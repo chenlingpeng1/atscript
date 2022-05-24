@@ -173,12 +173,6 @@ BYTE * CJfScriptParams::NewParamTypes()
 	return parms;
 }
 
-//===========================
-//argData[0]=(DWORD)tszHello;
-//argData[1]=(DWORD)tszHello
-//argData[0]=(DWORD)8;
-//argData[1]=(DWORD)9;
-//===========================
 DWORD * CJfScriptParams::NewParamDatas()
 {
 	DWORD *pData = new DWORD[m_listParam.GetCount()];
@@ -226,10 +220,6 @@ CJfScriptEngineMgr::~CJfScriptEngineMgr()
 {
 }
 
-//=======================================================
-// 与 COleDispatchDriver::InvokeHelper 
-// 的区另是：对错误进行了 Catch
-//=======================================================
 void AFX_CDECL CJfScriptEngineMgr::InvokeHelperEx(DISPID dwDispID, WORD wFlags,
 	VARTYPE vtRet, void* pvRet, const BYTE* pbParamInfo, ...)
 {
@@ -243,8 +233,6 @@ void AFX_CDECL CJfScriptEngineMgr::InvokeHelperEx(DISPID dwDispID, WORD wFlags,
 	CATCH_ALL(e)
 	{
 		AfxMessageBox( "脚本执行出错");
-		//m_ScriptSite.m_asErrorMessage.Add("脚本执行出错");
-		//DELETE_EXCEPTION(e);
 	}
 	END_CATCH_ALL
 
@@ -253,8 +241,6 @@ void AFX_CDECL CJfScriptEngineMgr::InvokeHelperEx(DISPID dwDispID, WORD wFlags,
 
 BOOL CJfScriptEngineMgr::HRVerify(HRESULT hr, CString msg)
 {
-	// If we have a failure, add the error string including
-	// hr value to the errormessages array of the scriptsite
 	if (FAILED(hr)) {
 		CString		str;
 

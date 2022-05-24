@@ -45,23 +45,19 @@ CAtsEngine::CAtsEngine()
 	m_nLastErrorCode	= 0;
 	m_ExpExt.m_pEgnine = this;
 
-	AddClassTemplate( new CWndParam );		// CWindParam
-	AddClassTemplate( new CValueSet );		// CValueSet
-	AddClassTemplate( new CRegKeyObj );		// CRegKey
-	AddClassTemplate( new CStringObj );		// string
-	AddClassTemplate( new CIntObj );		// CRegKey
-	AddClassTemplate( new CDoubleObj );		// string
-	AddClassTemplate( new CBoolObj );		// CBoolObj
+	AddClassTemplate( new CWndParam );
+	AddClassTemplate( new CValueSet );	
+	AddClassTemplate( new CRegKeyObj );
+	AddClassTemplate( new CStringObj );
+	AddClassTemplate( new CIntObj );
+	AddClassTemplate( new CDoubleObj );
+	AddClassTemplate( new CBoolObj );
 	AddClassTemplate( new CWSModuleObj );		
 	AddClassTemplate( new CDllModuleObj );
 
 	// 向引擎中加入常量
 	SetConstVar( "true"  , "1" , ATSVAR_TYPE_BOOL);
 	SetConstVar( "false" , "0" , ATSVAR_TYPE_BOOL);
-
-	// 向引擎中加入 System 对象类
-	//CSystemObj * pSystemObj = new CSystemObj;
-	//m_AtsEng.AddObjIns( _T("System") , pSystemObj );
 }
 
 CAtsEngine::~CAtsEngine()
@@ -126,26 +122,12 @@ void CAtsEngine::DetachList(CAtsString strListName)
 		if( !strListName.IsEmpty() )
 			return;
 	}
-
-/*	if( strListName.IsEmpty() || strListName == "m_listObjClass" )
-	{
-		for( pos = m_listObjClass.GetHeadPosition() ; pos ; )
-		{
-			pObject = (CAtsObject *)m_listObjClass.GetNext(pos); 
-			delete pObject;
-		}
-		m_listObjClass.RemoveAll();
-
-		if( !strListName.IsEmpty() )
-			return;
-	}*/
 }
 
 CAtsSegmentItem * CAtsEngine::GetSegment(CAtsString strName)
 {
 	POSITION			pos;
 	CAtsSegmentItem		*pSegmentItem = NULL;
-
 	for( pos = m_listSegment.GetHeadPosition() ; pos ; )
 	{
 		pSegmentItem = (CAtsSegmentItem *)m_listSegment.GetNext(pos); 
@@ -158,10 +140,8 @@ CAtsSegmentItem * CAtsEngine::GetSegment(CAtsString strName)
 BOOL CAtsEngine::LoadScript(LPCTSTR strScript)
 {
 	CAtsFile		ScriptFile;
-
 	ScriptFile.m_pEngine = this;
 	ScriptFile.LoadScript(strScript);
-
 	return LoadScriptFile( &ScriptFile );
 }
 
@@ -172,7 +152,6 @@ BOOL CAtsEngine::LoadScriptFile(LPCTSTR strScriptFile)
 	ScriptFile.m_pEngine = this;
 	if( !ScriptFile.OpenFile(strScriptFile) )
 		return false;
-	
 	return LoadScriptFile( &ScriptFile );
 }
 
@@ -180,7 +159,7 @@ BOOL CAtsEngine::LoadScriptFile(CAtsFile *pScriptFile)
 {
 	CAtsString			strSegmentData;
 	int					nSegmentType;
-	BOOL				bInSegment = false;	// 是否正在读取一个 Segment
+	BOOL				bInSegment = false;
 	CAtsSegmentItem		*pCurSegment = NULL;
 	CAtsString			strLine;
 	CAtsString			strVarName;
@@ -194,7 +173,6 @@ BOOL CAtsEngine::LoadScriptFile(CAtsFile *pScriptFile)
 	{
 		if( !pScriptFile->GetDataLine( strLine , true ) )
 			break;
-
 		if( bInSegment )
 		{
 			if( strLine.CompareNoCase("{") == 0 ) nLeftBracket++;
@@ -205,7 +183,6 @@ BOOL CAtsEngine::LoadScriptFile(CAtsFile *pScriptFile)
 				pCurSegment = NULL;
 				continue;
 			}
-			// 把空行也加到段中,主要是为了在出错时能定位出行号
 			if( strLine.Right(1) == ";" )
 				strLine.TrimRight(";");
 			
@@ -224,12 +201,10 @@ BOOL CAtsEngine::LoadScriptFile(CAtsFile *pScriptFile)
 					{
 						CAtsString	strFile,strType;
 						CAtsString	strFileData;
-
 						strTemp = strLine;
 						pScriptFile->GetElementItem(strTemp, strItem," ");
 						pScriptFile->GetElementItem(strTemp, strFile," ");
 						pScriptFile->GetElementItem(strTemp, strType," ");
-
 						if( strType.CompareNoCase("VbScript") == 0 )
 						{
 							strFile.TrimLeft("\"");
@@ -237,7 +212,6 @@ BOOL CAtsEngine::LoadScriptFile(CAtsFile *pScriptFile)
 							strTemp = m_strScriptPath + "\\";
 							strTemp = strTemp + strFile;
 							CAtsFile::ReadFromFile( strTemp, strFileData );
-
 							m_strVBScript += "\r\n";
 							m_strVBScript += strFileData;
 						}
@@ -291,18 +265,10 @@ BOOL CAtsEngine::ExistSegment( CAtsString strSegmentName )
 	else
 		return false;
 }
-
-//===================================================
-// 运行一个 Segment
-//===================================================
 BOOL CAtsEngine::RunSegment( CAtsString strSegmentName , CAtsParam *pParam )
 {
 	return DoCustomSysFun( strSegmentName, pParam , NULL );
 }
-
-//====================================================
-// 运行一个命令行
-//====================================================
 void CAtsEngine::RunCmdLine(CAtsSegIns *pCurSegIns , CAtsString strCmdLine , BOOL &bExit)
 {
 	CAtsString			strFistWord,strOther;
@@ -311,51 +277,36 @@ void CAtsEngine::RunCmdLine(CAtsSegIns *pCurSegIns , CAtsString strCmdLine , BOO
 	BOOL				bRet = false;
 	CAtsSentence		*pSentence = NULL;
 	CAtsSentIns			*pSentIns  = NULL;
-	
 	bExit = false;
-
-	// 最后一个字符为 ':' 表示为 标签
 	if( strCmdLine.Right(1) == ":" )
 		return;
-
 	CAtsFile::GetFistWord( strCmdLine , strFistWord , strOther );
 	if( strFistWord.CompareNoCase("if") == 0 )
 	{
-		// if()
 		CAtsSentIns			*pSentIns  = NULL;
 		CAtsSentence		*pSentence = NULL;
 		CAtsString			strCondition;
 
 		pCurSegIns->m_nNextPos--;
-		// 得到 if 的语句对象
 		pSentence = pCurSegIns->GetSentence_If( pCurSegIns->m_nNextPos , strCmdLine );
 		if( !pSentence ) 
 		{
 			m_bIsError = true;
 			return;
 		}
-
 		pSentIns = pCurSegIns->SentTop();
 		if( pSentIns == NULL || pSentIns->m_pSentence != pSentence )
 		{
-			// 如果还没有加入堆栈,则加入
 			pSentIns = new CAtsSentIns;
 			pSentIns->m_pSentence = pSentence;
 			pCurSegIns->m_listSentenceHeap.AddHead( pSentIns );
 		}
 		else
 		{
-			// 有可能格式为:
-			//      if( ... )
-			//           MessageBox(...);
-			// 没有 {} ，则在RunCmdLine 后会判断是否到了当前语句段结束，如果是会到语句段的开始，则会执行以下代码
-			// 如果已存在,则表示执行过了,则退出
 			pCurSegIns->m_nNextPos = pSentence->m_nEndPos + 1;
 			pCurSegIns->RemoveTopSentIns();
 			return;
 		}
-
-		// 判断条件
 		CSentenceSite	*pSiteItem = NULL;
 		POSITION		SitePos;
 		for( SitePos = pSentence->m_listSite.GetHeadPosition() ; SitePos ; )
@@ -363,7 +314,6 @@ void CAtsEngine::RunCmdLine(CAtsSegIns *pCurSegIns , CAtsString strCmdLine , BOO
 			pSiteItem = (CSentenceSite *)pSentence->m_listSite.GetNext( SitePos );
 			if( pSiteItem->m_strCondition.IsEmpty() )
 			{
-				// 如果无条件,则条件成立, 如 if ... else ... 
 				pCurSegIns->m_nNextPos = pSiteItem->m_nBeginPos+1;
 				return;
 			}
@@ -371,20 +321,15 @@ void CAtsEngine::RunCmdLine(CAtsSegIns *pCurSegIns , CAtsString strCmdLine , BOO
 			CHECK_ERROR()
 			if( bRet )
 			{
-				// 条件成立
 				pCurSegIns->m_nNextPos = pSiteItem->m_nBeginPos+1;
 				return;
 			}
 		}
-
-		// 条件都不满足
-		// 取出自已
 		pCurSegIns->RemoveTopSentIns();
 		pCurSegIns->m_nNextPos = pSentence->m_nEndPos + 1;
 	}
 	else if( strFistWord.CompareNoCase("}") == 0  )
 	{
-		// 结束一个语句
 		CAtsSentIns *pItem = pCurSegIns->SentTop();
 		if( !pItem ) SET_ERROR( ATS_ERRCODE_SENTENCE_ERROR )
 
@@ -413,12 +358,10 @@ void CAtsEngine::RunCmdLine(CAtsSegIns *pCurSegIns , CAtsString strCmdLine , BOO
 	}
 	else if( strFistWord.CompareNoCase("while") == 0 )
 	{
-		//While
 		CAtsSentence		*pSentence = NULL;
 		CAtsString			strCondition;
 
 		pCurSegIns->m_nNextPos--;
-		// 得到 if 的语句对象
 		pSentence = pCurSegIns->GetSentence_While( pCurSegIns->m_nNextPos , strCmdLine );
 		if( !pSentence ) 
 		{
@@ -432,7 +375,6 @@ void CAtsEngine::RunCmdLine(CAtsSegIns *pCurSegIns , CAtsString strCmdLine , BOO
 		pSentIns = pCurSegIns->SentTop();
 		if( pSentIns == NULL || pSentIns->m_pSentence != pSentence )
 		{
-			// 如果还没有加入堆栈,则加入
 			pSentIns = new CAtsSentIns;
 			pSentIns->m_nRunCount++;
 			pSentIns->m_pSentence = pSentence;
@@ -445,25 +387,19 @@ void CAtsEngine::RunCmdLine(CAtsSegIns *pCurSegIns , CAtsString strCmdLine , BOO
 		CHECK_ERROR()
 		if( bRet )
 		{
-			// 条件成立
 			pCurSegIns->m_nNextPos++;
 		}
 		else
 		{
-			// 如果已加入堆栈,则取出
 			pCurSegIns->RemoveTopSentIns();
-			
-			// 结束了, 跳过 end if
 			pCurSegIns->m_nNextPos = pSentence->m_nEndPos + 1;
 		}
 	}
 	else if( strFistWord.CompareNoCase("for") == 0 )
 	{
-		//for...next 语句
 		CAtsString			strCondition;
 
 		pCurSegIns->m_nNextPos--;
-		// 得到 for 的语句对象
 		pSentence = pCurSegIns->GetSentence_for( pCurSegIns->m_nNextPos , strCmdLine );
 		if( !pSentence ) 
 		{
@@ -475,18 +411,14 @@ void CAtsEngine::RunCmdLine(CAtsSegIns *pCurSegIns , CAtsString strCmdLine , BOO
 		pSentIns = pCurSegIns->SentTop();
 		if( pSentIns == NULL || pSentIns->m_pSentence != pSentence )
 		{
-			// 如果还没有加入堆栈,则加入
 			pSentIns = new CAtsSentIns;
 			pSentIns->m_nRunCount++;
 			pSentIns->m_pSentence = pSentence;
 			pCurSegIns->m_listSentenceHeap.AddHead( pSentIns );
-
-			// 执行初始化命令
 			RunCmdLine_simple( pCurSegIns , pSentence->m_strInitCmd , bExit);
 		}
 		else
 		{
-			// 执行Next命令
 			pSentIns->m_nRunCount++;
 			RunCmdLine_simple( pCurSegIns , pSentence->m_strNextCmd , bExit);
 		}
@@ -495,26 +427,20 @@ void CAtsEngine::RunCmdLine(CAtsSegIns *pCurSegIns , CAtsString strCmdLine , BOO
 		CHECK_ERROR()
 		if( bRet )
 		{
-			// 条件成立
 			pCurSegIns->m_nNextPos++;
 		}
 		else
 		{
-			// 如果已加入堆栈,则取出
 			pCurSegIns->RemoveTopSentIns();
-			
-			// 结束了, 跳过 end if
 			pCurSegIns->m_nNextPos = pSentence->m_nEndPos + 1;
 		}
 	}
 	else if( strFistWord.CompareNoCase("switch") == 0 )
 	{
-		// switch 语句
 		CAtsSentence		*pSentence = NULL;
 		CAtsString			strCondition;
 
 		pCurSegIns->m_nNextPos--;
-		// 得到 if 的语句对象
 		pSentence = pCurSegIns->GetSentence_Switch( pCurSegIns->m_nNextPos , strCmdLine );
 		if( !pSentence ) 
 		{
@@ -527,7 +453,6 @@ void CAtsEngine::RunCmdLine(CAtsSegIns *pCurSegIns , CAtsString strCmdLine , BOO
 		pSentIns = pCurSegIns->SentTop();
 		if( pSentIns == NULL || pSentIns->m_pSentence != pSentence )
 		{
-			// 如果还没有加入堆栈,则加入
 			pSentIns = new CAtsSentIns;
 			pSentIns->m_nRunCount++;
 			pSentIns->m_pSentence = pSentence;
@@ -535,8 +460,6 @@ void CAtsEngine::RunCmdLine(CAtsSegIns *pCurSegIns , CAtsString strCmdLine , BOO
 		}
 		else
 			pSentIns->m_nRunCount++;
-		
-		// 判断case条件
 		CSentenceSite	*pSiteItem = NULL;
 		POSITION		SitePos;
 		for( SitePos = pSentence->m_listSite.GetHeadPosition() ; SitePos ; )
@@ -544,7 +467,6 @@ void CAtsEngine::RunCmdLine(CAtsSegIns *pCurSegIns , CAtsString strCmdLine , BOO
 			pSiteItem = (CSentenceSite *)pSentence->m_listSite.GetNext( SitePos );
 			if( pSiteItem->m_strCondition.IsEmpty() )
 			{
-				// case else : 表示条件成立
 				pCurSegIns->m_nNextPos = pSiteItem->m_nBeginPos+1;
 				return;
 			}
@@ -554,35 +476,26 @@ void CAtsEngine::RunCmdLine(CAtsSegIns *pCurSegIns , CAtsString strCmdLine , BOO
 			CHECK_ERROR()
 			if( bRet )
 			{
-				// 条件成立
 				pCurSegIns->m_nNextPos = pSiteItem->m_nBeginPos+1;
 				return;
 			}
 		}
-
-		// 如果已加入堆栈,则取出
 		pCurSegIns->RemoveTopSentIns();
-		// 结束了, 跳过 end if
 		pCurSegIns->m_nNextPos = pSentence->m_nEndPos + 1;
 		return;
 	}
 	else if( strFistWord.CompareNoCase("case") == 0  )
 	{
-		// 如果没有 switch 语句在运行,则出错
 		CAtsSentIns *pItem = pCurSegIns->SentTop();
 		if( !pItem ) SET_ERROR( ATS_ERRCODE_SWITCH_ERROR )
 		if( pItem->m_pSentence->m_nType != ATS_SENTENCE_TYPE_SWITCH ) SET_ERROR( ATS_ERRCODE_SWITCH_ERROR )
 		pCurSegIns->m_nNextPos = pItem->m_pSentence->m_nEndPos + 1;
-		//pCurSegIns->RemoveTopSentIns();
 	}
 	else if( strFistWord.CompareNoCase("do") == 0 )
 	{
-		//Do...while 语句
 		CAtsSentence		*pSentence = NULL;
 		CAtsString			strCondition;
-
 		pCurSegIns->m_nNextPos--;
-		// 得到 if 的语句对象
 		pSentence = pCurSegIns->GetSentence_Do( pCurSegIns->m_nNextPos , strCmdLine );
 		if( !pSentence ) 
 		{
@@ -596,29 +509,20 @@ void CAtsEngine::RunCmdLine(CAtsSegIns *pCurSegIns , CAtsString strCmdLine , BOO
 		pSentIns = pCurSegIns->SentTop();
 		if( pSentIns == NULL || pSentIns->m_pSentence != pSentence )
 		{
-			// 如果还没有加入堆栈,则加入
 			pSentIns = new CAtsSentIns;
 			pSentIns->m_nRunCount++;
 			pSentIns->m_pSentence = pSentence;
 			pCurSegIns->m_listSentenceHeap.AddHead( pSentIns );
 		}
 		else
-		{
-			// 执行Next命令
 			pSentIns->m_nRunCount++;
-		}
-
-		// 条件成立
 		pCurSegIns->m_nNextPos++;
 	}
 	else if( strFistWord.CompareNoCase("break") == 0 )
 	{
-		//1. for
-		//2. while
-		//3. swith
 		CAtsSentIns *pItem = NULL;
 		
-		pCurSegIns->SentPop_Cant_Break();	// 先取出语句堆的不支持  break 指令的段,如 IF
+		pCurSegIns->SentPop_Cant_Break();
 		pItem = pCurSegIns->SentTop();
 		if( !pItem ) SET_ERROR( ATS_ERRCODE_EXIT_ERROR )
 		pCurSegIns->m_nNextPos = pItem->m_pSentence->m_nEndPos + 1;
@@ -629,13 +533,10 @@ void CAtsEngine::RunCmdLine(CAtsSegIns *pCurSegIns , CAtsString strCmdLine , BOO
 		CAtsValue		vReturn;
 
 		strReturn = (LPCTSTR)strOther;
-		// 从一个 Segment 中退出
 		if( !strOther.IsEmpty() )
 		{
 			CAtsExpMgr		Jfe;
-	
 			Jfe.m_pFEExt = &m_ExpExt;
-			
 			m_ExpExt.m_pSegIns = pCurSegIns;
 			if( !Jfe.Computer( (LPCTSTR)strOther , &vReturn ) )
 			{
@@ -663,10 +564,8 @@ void CAtsEngine::RunCmdLine_simple(CAtsSegIns *pCurSegIns , CAtsString strCmdLin
 
 	if( strFistWord.Find('.') > 0 )
 	{
-		// 执行 Object 的 Function , 如: Install.DoDailog sdWellcom,@@Param
 		if( !RunFun( (LPCTSTR)strFistWord , (LPCTSTR)strOther, pCurSegIns ) )
 			m_bIsError = true;
-
 		return;
 	}
 	else if( strFistWord.CompareNoCase("var") == 0 )
@@ -679,7 +578,6 @@ void CAtsEngine::RunCmdLine_simple(CAtsSegIns *pCurSegIns , CAtsString strCmdLin
 			SetError( ATS_ERRCODE_DEFINE_VAR );
 			return;
 		}
-
 		while( CAtsFile::GetElementItem(strOther,  strItem,"," ) )
 		{
 			CAtsFile::GetFistWord( strItem , strVarName , strSeting );
@@ -702,7 +600,6 @@ void CAtsEngine::RunCmdLine_simple(CAtsSegIns *pCurSegIns , CAtsString strCmdLin
 	}
 	else if( IsVar( strFistWord , pCurSegIns ) )
 	{
-		// 如果每一个字是变量，则进行赋值操作
 		if( !SetDataEx( strFistWord , strOther , pCurSegIns ) )
 		{
 			m_bIsError = true;
@@ -711,7 +608,6 @@ void CAtsEngine::RunCmdLine_simple(CAtsSegIns *pCurSegIns , CAtsString strCmdLin
 	}
 	else if( strFistWord.CompareNoCase("Set") == 0 )
 	{
-		// 赋值
 		CAtsFile::GetFistWord( strOther , strFistWord , strOther );
 		if( !IsVar(strFistWord,  pCurSegIns ) )
 			SetError( ATS_ERRCODE_SETDATA_ERROR );
@@ -721,17 +617,12 @@ void CAtsEngine::RunCmdLine_simple(CAtsSegIns *pCurSegIns , CAtsString strCmdLin
 	}
 	else if( strFistWord.CompareNoCase("Goto") == 0 )
 	{
-		// 跳转
 		Goto( pCurSegIns , strOther );
 	}
 	else
 	{
-		// 先判断是否为 function
 		if( strOther.Left(1) == "=" )
-		{
-			// 如果 Other 的第一个字符是 = ,并 strFistWord 不是变量，则出错
 			SetError( ATS_ERRCODE_NOTEXISTVAR , strFistWord );
-		}
 		else
 		{
 			if( !RunFun( (LPCTSTR)strFistWord , (LPCTSTR)strOther , pCurSegIns ) )
@@ -739,11 +630,6 @@ void CAtsEngine::RunCmdLine_simple(CAtsSegIns *pCurSegIns , CAtsString strCmdLin
 		}
 	}
 }
-
-//==========================================
-// 赋值, strExp 是一个表达式
-// strExp 中要包括 '='
-//==========================================
 BOOL CAtsEngine::SetDataEx( CAtsString strVarName , CAtsString strExp , CAtsSegIns *pSegIns )
 {
 	CAtsExpMgr		Jfe;
@@ -752,10 +638,8 @@ BOOL CAtsEngine::SetDataEx( CAtsString strVarName , CAtsString strExp , CAtsSegI
 	CAtsString		strFistWord,strOther;
 	CAtsVarItem		*pVarItem = NULL;
 	CAtsString		strOP;
-
 	strExp.Replace('\t', ' ');
 	strExp.TrimLeft(' ');
-	// 长度最小为2,如: "=3"
 	if( strExp.GetLength() < 2 )
 		return false;
 
@@ -868,12 +752,8 @@ BOOL CAtsEngine::SetDataEx( CAtsString strVarName , CAtsString strExp , CAtsSegI
 	strOP = strExp.Left(1);
 	if( strOP != "=" )
 		return false;
-
 	strExp = strExp.Mid(1);
-
 	CAtsFile::GetFistWord( strExp , strFistWord , strOther );
-	
-	// 先判断是不是一些特殊的赋值Function
 	if( strFistWord.CompareNoCase("Nothing") == 0 )
 	{
 		CAtsVarItem		*pVarItem = NULL;
@@ -899,7 +779,6 @@ BOOL CAtsEngine::SetDataEx( CAtsString strVarName , CAtsString strExp , CAtsSegI
 	}
 	else if( strFistWord.CompareNoCase("CreateAtsObject") == 0 )
 	{
-		// 是创建 Ats 对象
 		CAtsParam		Param;
 		CAtsObject		*pObj = NULL;
 
@@ -946,21 +825,15 @@ BOOL CAtsEngine::SetDataEx( CAtsString strVarName , CAtsString strExp , CAtsSegI
 		return bRet;
 	}
 }
-
-//==========================================
-// 赋值
-//==========================================
 BOOL CAtsEngine::SetData( CAtsString strVarName , CAtsString strOther , CAtsSegIns *pSegIns)
 {
 	CAtsString		strItem;
-
 	strOther.TrimLeft(' ');
 	CAtsFile::GetElementItem( strOther,  strItem, " " );
 	if( strItem != "=" || strOther.IsEmpty() )
 		return false;
 	if( strOther.Right(1) == ")" )
 	{
-		//path: 表示为一个 Fun
 		CAtsString		strFistWord;
 		CAtsParam		param;
 	
@@ -982,21 +855,11 @@ BOOL CAtsEngine::SetData( CAtsString strVarName , CAtsString strOther , CAtsSegI
 	}
 	return false;
 }
-
-//===================================================
-// 执行一个 function
-//===================================================
 BOOL CAtsEngine::RunFun( CAtsString strFunName , CAtsString strParam , CAtsSegIns *pSegIns)
 {
 	CAtsExpMgr		Jfe;
 		
 	Jfe.m_pFEExt = &m_ExpExt;
-	// 整行进行计算,则所有的 function 都必须有括号
-	//Jfe.Computer( (LPCTSTR)strCmdLine , strReturn );
-	//if( Jfe.m_bIsError  )
-	//	m_bIsError = true;
-	
-	// 只对后面进行计算,则第一个function 可以没括号
 	CAtsParam		param;
 	
 	param.m_pEng			= this;
@@ -1010,15 +873,10 @@ BOOL CAtsEngine::RunFun( CAtsString strFunName , CAtsString strParam , CAtsSegIn
 		return false;
 	}
 }
-
-//===================================================
-// 执行一个 function
-//===================================================
 BOOL CAtsEngine::RunFun( CAtsString strFunName , CAtsParam *pParam , CAtsSegIns *pSegIns)
 {
 	if( strFunName.Find('.') > 0 )
 	{
-		// 执行 Object 的 Function , 如: Install.DoDailog sdWellcom,@@Param
 		if( !DoObjFun( (LPCTSTR)strFunName , pParam , pSegIns ) )
 		{
 			m_bIsError		= true;
@@ -1040,10 +898,6 @@ BOOL CAtsEngine::RunFun( CAtsString strFunName , CAtsParam *pParam , CAtsSegIns 
 			return false;
 		}
 	}
-
-	//-------------------------------------------
-	// 处理 out 的变量数据
-	//-------------------------------------------
 	POSITION		pos;
 	CAtsVarItem		*pVarItem = NULL;
 	for( pos = pParam->m_listParam.GetHeadPosition() ; pos ; )
@@ -1051,7 +905,6 @@ BOOL CAtsEngine::RunFun( CAtsString strFunName , CAtsParam *pParam , CAtsSegIns 
 		pVarItem = (CAtsVarItem *)pParam->m_listParam.GetNext( pos );
 		if( pVarItem->m_nFlag & ATSVAR_FLAG_OUT )
 		{
-			// 如果当前变量的数据是out , 则要对外部的变量进行赋值
 			if( !pVarItem->m_strName.IsEmpty() )
 				SetVar( pVarItem->m_strName , &pVarItem->m_vData , pSegIns );
 		}
@@ -1079,7 +932,6 @@ void CAtsEngine::SetGlobalParam( CString strName , CString strData )
 CString CAtsEngine::GetGlobalParam( CString strName )
 {
 	int		nNum,nCount;
-
 	nCount = m_asGlobalParamName.GetSize();
 	for( nNum = 0 ; nNum < nCount ; nNum++ )
 	{
@@ -1089,26 +941,19 @@ CString CAtsEngine::GetGlobalParam( CString strName )
 	}
 	return _T("");
 }
-
-//===========================================================
-// 执行 AtScript 的系统 Function
-//===========================================================
 BOOL CAtsEngine::DoAtsSysFun( CAtsSegIns *pSegIns , CAtsString strFunName, CAtsParam *pParam )
 {
 	CAtsString		strData;
 
 	if( strFunName.CompareNoCase("DataCpy") == 0 )
 	{
-		// 对一个变量进行赋值
 		strData = GetFactData( pParam->GetItemData(2) , pSegIns );
 		pParam->SetOutData( 1, strData );
 		return true;
 	}
 	else if( strFunName.CompareNoCase("SetGlobalParam") == 0 )
 	{
-		// 得到全局的 Param 值
 		CString		strName;
-
 		strName = GetFactData( pParam->GetItemData(1) , pSegIns );
 		strData = GetFactData( pParam->GetItemData(2) , pSegIns );
 		SetGlobalParam( strName , strData);
@@ -1116,7 +961,6 @@ BOOL CAtsEngine::DoAtsSysFun( CAtsSegIns *pSegIns , CAtsString strFunName, CAtsP
 	}
 	else if( strFunName.CompareNoCase("GetGlobalParam") == 0 )
 	{
-		// 得到全局的 Param 值
 		CString		strName;
 
 		strName = GetFactData( pParam->GetItemData(1) , pSegIns );
@@ -1126,7 +970,6 @@ BOOL CAtsEngine::DoAtsSysFun( CAtsSegIns *pSegIns , CAtsString strFunName, CAtsP
 	}
 	else if( strFunName.CompareNoCase("GetSystemParam") == 0 )
 	{
-		// 得到全局的 Param 值
 		CString		strName;
 
 		strName = GetFactData( pParam->GetItemData(1) , pSegIns );
@@ -1134,19 +977,8 @@ BOOL CAtsEngine::DoAtsSysFun( CAtsSegIns *pSegIns , CAtsString strFunName, CAtsP
 		pParam->SetReturnDataEx( strData , ATSVAR_TYPE_STRING );
 		return true;
 	}
-	/*else if( strFunName.CompareNoCase("CreateNewGUID") == 0 )
-	{
-		// 得到一个新的 GUID
-		CAtsString		strData;
-	
-		strData = CAtsBaseFun::GenerateGUIDString();
-		pParam->SetOutData( 1, strData );
-		return true;
-	}*/
 	else if( strFunName.CompareNoCase("MessageBox") == 0 )
 	{
-		//MessageBox( LPCTSTR lpszText, LPCTSTR lpszCaption = NULL, UINT nType = MB_OK );
-		//MessageBox(prompt[, buttons][, title][, helpfile, context])
 		CAtsString		strData;
 		CAtsVarItem		*pVarItrem	= NULL;
 		CAtsVarItem		*pTitle		= NULL;
@@ -1174,8 +1006,6 @@ BOOL CAtsEngine::DoAtsSysFun( CAtsSegIns *pSegIns , CAtsString strFunName, CAtsP
 	}
 	else if( strFunName.CompareNoCase("DataCmpGoto") == 0 )
 	{
-		// 如果比较数据结果相同则跳转
-		// 不支持对参数进行运算, 不是一个真正的 function
 		if( pParam->DataCmp( 1 , 2 ) == 0 )
 		{
 			CAtsString	strTagName = pParam->GetItemData( 3,false);
@@ -1183,28 +1013,20 @@ BOOL CAtsEngine::DoAtsSysFun( CAtsSegIns *pSegIns , CAtsString strFunName, CAtsP
 		}
 		return true;
 	}
-	//CallVBSFunctionTof
-	//CallVBSFunctionToi
 	else if( strFunName.CompareNoCase("CallVBSFunction") == 0 )
 	{
-		// 调用VBScript 的 function
-		// CallVBSFunction( "MyFun" , "abc" , 9 );
 		if( m_strVBScript.IsEmpty() )
 		{
 			pParam->SetReturnDataEx( "" , ATSVAR_TYPE_STRING );
 			return false;
 		}
-
 		CAtsString		strFunName = GetFactData( pParam->GetItemData(1), pSegIns );
-
 		CJfScriptEngineMgr	ScriptFactory;
 		ScriptFactory.InitializeScriptEngine(JFSCRIPT_ENGINE_VBS);
 		ScriptFactory.LoadScript(m_strVBScript);
-
 		CJfScriptParams	Params;
 		CString			strReturn;
 		CAtsVarItem		*pItem = NULL;
-
 		for( int nNum = 2 ; nNum <= pParam->m_listParam.GetCount() ; nNum++ )
 		{
 			pItem = pParam->GetItem( nNum );
@@ -1231,35 +1053,25 @@ BOOL CAtsEngine::DoAtsSysFun( CAtsSegIns *pSegIns , CAtsString strFunName, CAtsP
 		{
 			CStringArray	asErrorInfo;
 			int				nNum,nCount;
-
 			ScriptFactory.GetErrorMessages( asErrorInfo );
 			nCount = asErrorInfo.GetSize();
 			for( nNum = 0 ; nNum < nCount ; nNum++ )
 				MessageBox( NULL , asErrorInfo.GetAt( nNum ) , "AtScript" , 0 );
-
 			return false;
 		}
 		return true;
 	}
 	return false;
 }
-
-//====================================================
-// 得到一个存在的对象
-//====================================================
 CAtsObject * CAtsEngine::GetObjIns( CAtsString strName ,CAtsSegIns *pSegIns)
 {
 	CAtsVarItem		*pVarItem = NULL;
 
 	pVarItem =	GetVarItem( pSegIns , strName );
-	if( !pVarItem || !pVarItem->m_vData.m_pObject )// !pVarItem->IsObject() )
+	if( !pVarItem || !pVarItem->m_vData.m_pObject )
 		return NULL;
 	return  (CAtsObject *)pVarItem->m_vData.m_pObject;
 }
-
-//====================================================
-// 新建一个对象Class 模板
-//====================================================
 void CAtsEngine::AddClassTemplate( CAtsObject *pObjCalss , CString sName)
 {
 	if( !sName.IsEmpty() )
@@ -1268,10 +1080,6 @@ void CAtsEngine::AddClassTemplate( CAtsObject *pObjCalss , CString sName)
 	pObjCalss->m_pEngine = this;
 	m_listExtClass.AddTail( pObjCalss );
 }
-
-//====================================================
-// 新建一个对象Class
-//====================================================
 void CAtsEngine::AddObjIns( LPCTSTR sName , CAtsObject *pObjCalss )
 {
 	pObjCalss->m_pEngine = this;
@@ -1283,36 +1091,27 @@ void CAtsEngine::AddObjIns( LPCTSTR sName , CAtsObject *pObjCalss )
 	pNewVar->AddRef();
 	m_listUserVar.AddTail( pNewVar );
 }
-
-//=======================================================
-// 执行一个 Obj 的 function
-//=======================================================
 BOOL CAtsEngine::DoObjFun( CAtsString strFistWord , CAtsParam *pParam , CAtsSegIns *pSegIns)
 {
 	int				nPos;
 	CAtsString		strObjName;
 	CAtsString		strFunName;
 	CAtsObject		*pObjIns = NULL;
-
 	nPos		= strFistWord.Find('.');
 	strObjName	= strFistWord.Left(nPos);
 	strFunName	= strFistWord.Mid(nPos+1);
-	
 	pObjIns = GetObjIns( strObjName , pSegIns );
 	if( !pObjIns )
 		return false;
-
 	pParam->m_pEng = this;
 	return pObjIns->DoFun( strFunName , pParam , pSegIns);
 }
-
 void CAtsEngine::SetVar(LPCTSTR sName , int nData , CAtsSegIns *pSegIns)
 {
 	CAtsString		strData;
 	strData.Format("%d" , nData );
 	SetVar( sName , (LPCTSTR)strData , pSegIns );
 }
-
 void CAtsEngine::SetVar(LPCTSTR sName , LPCTSTR sData , CAtsSegIns *pSegIns)
 {
 	CPtrList			*pList = NULL;
@@ -1320,7 +1119,6 @@ void CAtsEngine::SetVar(LPCTSTR sName , LPCTSTR sData , CAtsSegIns *pSegIns)
 	BOOL				bFind = false;
 	CAtsString			strName = sName;
 	CAtsString			strData = sData;
-
 	pVarItem =	GetVarItem( pSegIns , sName );
 	if( pVarItem )
 	{
@@ -1328,7 +1126,6 @@ void CAtsEngine::SetVar(LPCTSTR sName , LPCTSTR sData , CAtsSegIns *pSegIns)
 			pVarItem->m_vData.SetData( strData );
 		return;
 	}
-
 	pVarItem = new CAtsVarItem;
 	pVarItem->AddRef();
 	pVarItem->m_strName = strName;
@@ -1357,11 +1154,6 @@ void CAtsEngine::SetVar(LPCTSTR sName , CAtsValue *pData, CAtsSegIns *pSegIns)
 	m_listUserVar.AddTail( pVarItem );
 }
 
-//==========================================================
-// 是否为对象的变量
-// 支持 @ 提前
-// 支持 @ObjName.VarName 和 ObjName.@VarName
-//==========================================================
 BOOL CAtsEngine::IsObjVar(CAtsString strName , CAtsString &strObjName , CAtsString &strVarName )
 {
 	BOOL	bIsSysVar = false;
@@ -1384,7 +1176,6 @@ BOOL CAtsEngine::IsObjVar(CAtsString strName , CAtsString &strObjName , CAtsStri
 		strVarName = "@@" + strVarName;
 	else if( nBegin == 1 )
 		strVarName = "@" + strVarName;
-
 	return true;
 }
 
@@ -1399,13 +1190,8 @@ CAtsString CAtsEngine::GetVar(LPCTSTR sName , BOOL &bExit , CAtsSegIns *pSegIns)
 		bExit = true;
 		return pVarItem->m_vData.GetStrData();
 	}
-
 	return _T("");
 }
-
-//=======================================================
-// 是否为变量
-//=======================================================
 BOOL CAtsEngine::IsVar( LPCTSTR sName ,  CAtsSegIns *pSegIns )
 {
 	if( GetVarItem( pSegIns , sName ) )
@@ -1413,10 +1199,6 @@ BOOL CAtsEngine::IsVar( LPCTSTR sName ,  CAtsSegIns *pSegIns )
 	else
 		return false;
 }
-
-//=======================================================
-// 得到变量对象
-//=======================================================
 CAtsVarItem * CAtsEngine::GetVarItem(CAtsSegIns *pSegIns , LPCTSTR sName )
 {
 	POSITION		pos;
@@ -1432,36 +1214,26 @@ CAtsVarItem * CAtsEngine::GetVarItem(CAtsSegIns *pSegIns , LPCTSTR sName )
 		pObj = GetObjIns( strObjName , pSegIns );
 		if( pObj )
 			return pObj->GetVarItem( strVarName );
-
 		return NULL;
 	}
-
-	// 判断是不是段中的变量
 	if( pSegIns )
 	{
 		pVarItem = pSegIns->GetVarItem( strName );
 		if( pVarItem )
 			return pVarItem;
 	}
-
-	// 判断是不是全局的变量
 	for( pos = m_listUserVar.GetHeadPosition() ; pos ; )
 	{
 		pVarItem = (CAtsVarItem *)m_listUserVar.GetNext(pos); 
 		if( pVarItem->m_strName.CompareNoCase( strName ) == 0 )
 			return pVarItem;
 	}
-
 	return NULL;
 }
 
 CAtsString CAtsEngine::GetFactData( CAtsValue * pData , CAtsSegIns *pSegIns)
 {
 	BOOL		bExist = false;
-
-//??	if( !pSegIns )
-//??		pSegIns = m_pCurSegIns;
-
 	if( pData->m_nType == ATSVAR_TYPE_VAR )
 	{
 		CAtsString		strFaceData;
@@ -1473,10 +1245,6 @@ CAtsString CAtsEngine::GetFactData( CAtsValue * pData , CAtsSegIns *pSegIns)
 	else
 		return pData->GetStrData();
 }
-
-//=====================================================
-// 得到真实的数据，如把一个变量名用其值取代
-//=====================================================
 CAtsString CAtsEngine::GetFactData( CAtsString strData , CAtsSegIns *pSegIns)
 {
 	if( strData.IsEmpty() )
@@ -1492,17 +1260,12 @@ CAtsString CAtsEngine::GetFactData( CAtsString strData , CAtsSegIns *pSegIns)
 	}
 	else if( strData.GetLength() >= 2 )
 	{
-		// 去除字串器引号
 		if( strData.Left(1) == "\"" && strData.Right(1) == "\"" )
 			strData = strData.Mid(1, strData.GetLength() - 2 );
 	}
 
 	return strData;
 }
-
-//==================================================
-// 判断条件是否成立
-//==================================================
 BOOL CAtsEngine::CheckCondition( CAtsString strCondition , CAtsSegIns *pSegIns)
 {
 	CAtsExpMgr		Jfe;
@@ -1519,11 +1282,6 @@ BOOL CAtsEngine::CheckCondition( CAtsString strCondition , CAtsSegIns *pSegIns)
 	}
 	return bRet;
 }
-
-
-//==================================================
-// 进行表达式计算
-//==================================================
 BOOL CAtsEngine::Computer( CAtsString strExpress , CAtsValue *pValue , CAtsSegIns *pSegIns)
 {
 	CAtsExpMgr		Jfe;
@@ -1541,10 +1299,6 @@ BOOL CAtsEngine::Computer( CAtsString strExpress , CAtsValue *pValue , CAtsSegIn
 	}
 	return true;
 }
-
-//==================================================
-// 判断是否为Sript 自定放的 Function
-//==================================================
 BOOL CAtsEngine::IsCoustomFun( CAtsString strFunName )
 {
 	POSITION			pos;
@@ -1568,7 +1322,6 @@ void CAtsEngine::ClearData()
 void CAtsEngine::SetError(int nErrorCode , LPCTSTR strErrorWord , int nErrorLine)
 {
 	ASSERT( false );
-	// 这样可以保最小的出错信息
 	if( m_bIsError )
 		return;
 
@@ -1577,17 +1330,10 @@ void CAtsEngine::SetError(int nErrorCode , LPCTSTR strErrorWord , int nErrorLine
 	m_nErrorLine		= nErrorLine;
 	m_strErrorWord		= strErrorWord;
 }
-
-//====================================================
-// 运行一个子Seg实例
-//====================================================
 BOOL CAtsEngine::RunSubRegmentIns( CAtsSegIns *pSubSegIns , CAtsParam *pParam , CAtsSegIns *pParentSegIns )
 {
 	CAtsString		strCmdLine;
 	BOOL			bExit;
-
-	// 先Load 数据事,再设置 m_pCurSegIns , 因为在 LoadParamData
-	// 是可能要用到上一层的 Ins
 	if( !pSubSegIns->LoadParamData(pParam) )
 	{
 		m_bIsError		= true;
@@ -1599,8 +1345,6 @@ BOOL CAtsEngine::RunSubRegmentIns( CAtsSegIns *pSubSegIns , CAtsParam *pParam , 
 		TRACE("Script Error:%s,%d" , __FILE__ , __LINE__ );
 		return false;
 	}
-
-//??m_pEngine->m_pCurSegIns = pSegIns;
 	while( true )
 	{
 		if( !pSubSegIns->GetNextCmdLine(strCmdLine) )
@@ -1610,10 +1354,7 @@ BOOL CAtsEngine::RunSubRegmentIns( CAtsSegIns *pSubSegIns , CAtsParam *pParam , 
 			continue;
 		if( strCmdLine == "{" )
 			continue;
-
-		// 首先判断是不是变量
 		CAtsString		strVarName,strVarType;
-
 		RunCmdLine( pSubSegIns , strCmdLine , bExit );
 		if( m_bIsError )
 		{
@@ -1626,22 +1367,13 @@ BOOL CAtsEngine::RunSubRegmentIns( CAtsSegIns *pSubSegIns , CAtsParam *pParam , 
 		}
 		if( bExit )
 			break;
-
-		// 判断是不是一个语句段结束了
 		CAtsSentIns * pTopSentIns = NULL;
 		pTopSentIns = pSubSegIns->SentTop();
  		if( pTopSentIns && pTopSentIns->m_pSentence->IsEndSent( pSubSegIns->m_nNextPos-1 ) )
-		{
-			// 如果一个语句段结束了(已执行过最后一行),则回到语句段的开始
 			pSubSegIns->m_nNextPos = pTopSentIns->m_pSentence->m_nBeginPos;
-		}
 	}
 	return true;
 }
-
-//===========================================================
-// 执行 自定放的 Function
-//===========================================================
 BOOL CAtsEngine::DoCustomSysFun( CAtsString strFunName, CAtsParam *pParam , CAtsSegIns *pSegIns)
 {
 	CAtsSegmentItem *	pItem = NULL;
@@ -1659,36 +1391,20 @@ BOOL CAtsEngine::DoCustomSysFun( CAtsString strFunName, CAtsParam *pParam , CAts
 	pSubSegIns->m_pEngine		= this;
 	pSubSegIns->m_pSegmentItem	= pItem;
 
-	// 入载
 	m_listSegIns.AddHead( pSubSegIns );
-
-	// 运行
 	if( !RunSubRegmentIns( pSubSegIns , pParam, pSegIns ) )
 		return false;
-
-	// 出载
 	POSITION		pos;
 	CAtsVarItem		*pVarItem	= NULL;
 	CAtsVarItem		*pTempItem	= NULL;
-
-//??	m_pCurSegIns = NULL;
-
-	// 把最上面的取出
 	m_listSegIns.RemoveHead();
-	
-	// 如果堆中还有 Ins , 地取出
 	if( m_listSegIns.GetCount() > 0 )
 	{
-		// 把最上一个设置为当前 Ins
-//??		m_pCurSegIns = (CAtsSegIns *)m_listSegIns.GetHead();
-
-		// 把 pCurSegIns 中 Out 的数据取回
 		for( pos = pSubSegIns->m_InParam.m_listParam.GetHeadPosition() ; pos ; )
 		{
 			pVarItem = ( CAtsVarItem * )pSubSegIns->m_InParam.m_listParam.GetNext( pos );
 			if( pVarItem->m_nFlag & ATSVAR_FLAG_OUT )
 			{
-				// 当前 pVarItem 存入的是不是一个外部变量名
 				if( IsVar( (LPCTSTR)pVarItem->m_vData.GetStrData() , pSegIns  ) )
 				{
 					pTempItem = pSubSegIns->GetVarItem( pVarItem->m_strName );
@@ -1698,8 +1414,6 @@ BOOL CAtsEngine::DoCustomSysFun( CAtsString strFunName, CAtsParam *pParam , CAts
 			}
 		}
 	}
-
-	// 把 Return 的值也取回来
 	if( pParam )
 		pParam->m_vReturn = pSubSegIns->m_InParam.m_vReturn;
 
@@ -1707,10 +1421,6 @@ BOOL CAtsEngine::DoCustomSysFun( CAtsString strFunName, CAtsParam *pParam , CAts
 	pSubSegIns   = NULL;
 	return true;
 }
-
-//==================================================
-// 是否是扩展类
-//==================================================
 CAtsObject * CAtsEngine::GetClassTemplate( CAtsString strType )
 {
 	POSITION		pos;
@@ -1754,12 +1464,6 @@ CAtsVarItem * CAtsEngine::NewVarItem( CAtsString strName , CAtsString strVarType
 
 	return pNewVar;
 }
-
-//========================================================
-// 跳转
-// 跳转是一个危险的指令，可能会破坏语句段的链表
-// 所以有一个规定，语标(Tag)不能入在语句段中(但可以在 sub function 中)
-//========================================================
 void CAtsEngine::Goto( CAtsSegIns *pCurSegIns , CAtsString strTag )
 {
 	int				nPos;
@@ -1768,9 +1472,6 @@ void CAtsEngine::Goto( CAtsSegIns *pCurSegIns , CAtsString strTag )
 
 	nPos = pCurSegIns->m_pSegmentItem->GetTagIndex( strTag );
 	pCurSegIns->m_nNextPos = nPos;
-
-	//如果 goto 指令是在一个 语句段 中发出的，则要退出这些语句段
-	
 	for( pos = pCurSegIns->m_listSentenceHeap.GetHeadPosition() ; pos ;  )
 	{
 		OldPos	= pos;
@@ -1783,10 +1484,6 @@ void CAtsEngine::Goto( CAtsSegIns *pCurSegIns , CAtsString strTag )
 		}
 	}
 }
-
-//======================================
-// 设置常量
-//======================================
 void CAtsEngine::SetConstVar(LPCTSTR sName , CString strData , int nType )
 {
 	CAtsVarItem *pVarItem	= new CAtsVarItem;
@@ -1796,16 +1493,7 @@ void CAtsEngine::SetConstVar(LPCTSTR sName , CString strData , int nType )
 	pVarItem->m_vData.SetDataEx( strData , nType );
 	m_listUserVar.AddTail( pVarItem );
 }
-
-
 CString	CAtsEngine::GetSystemParam( CString strName )
 {
-	if( strName.CompareNoCase("ScriptPath") == 0 )
-	{
-	}
-	else if( strName.CompareNoCase("ScriptDir") == 0 )
-	{
-	}
-
 	return _T("");
 }

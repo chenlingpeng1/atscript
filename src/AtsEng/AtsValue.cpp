@@ -51,9 +51,6 @@ CAtsString CAtsValue::Repeat(  char cItem , int nCount )
 	return strString;
 }
 
-//====================================================
-// 优化数字形数据 如：3.44000 —> 3.44
-//====================================================
 void CAtsValue::OptimizeByNum(CAtsString &strData)
 {
 	int			nPos;
@@ -295,10 +292,6 @@ void CAtsValue::AddData( int dData )
 		((CDoubleObj *)(CAtsObject *)m_pObject)->AddData( (double)dData );
 	}
 }
-
-//============================================
-// 除一个值
-//============================================
 void CAtsValue::DivideData( double dData )
 {
 	if( m_nType == ATSVAR_TYPE_INT )
@@ -312,10 +305,6 @@ void CAtsValue::DivideData( double dData )
 		((CDoubleObj *)(CAtsObject *)m_pObject)->DivideData( (double)dData );
 	}
 }
-
-//============================================
-// 乘一个值
-//============================================
 void CAtsValue::MultiplyData( double dData )
 {
 	if( m_nType == ATSVAR_TYPE_INT )
@@ -329,10 +318,6 @@ void CAtsValue::MultiplyData( double dData )
 		((CDoubleObj *)(CAtsObject *)m_pObject)->MultiplyData( (double)dData );
 	}
 }
-
-//============================================
-// 模一个值
-//============================================
 void CAtsValue::ModeData( int dData )
 {
 	if( m_nType == ATSVAR_TYPE_INT )
@@ -372,21 +357,6 @@ int CAtsValue::GetNumType(CAtsString strData)
 	else
 		return ATSVAR_TYPE_INT;
 }
-
-/*****************************************************************************
- * Klasse:		CAtsExpMgr
- * Funktion:	Dec
- * Parameter:	val			Bin鋜-, Dezimal- oder Hexadezimal-Wert als String
- * Return:		Wert als Double
- * Beispiel:	Dec("1001b")	==> 9
- *				Dec("0x80")		==> 128
- *				Dec("1234")		==> 1234
- *				Dec("12e3")		==> 12000
- *				Dec("12e-3")	==> 0.012
- *
- * Rechnet einen Wert in Stringdarstellung als Bin鋜- (abschlie遝ndes 'b'),
- * Hexadezimal- (f黨rendes '0x') oder Dezimalwert in einen Zahlenwer um.
- ****************************************************************************/
 double CAtsValue::Dec(const CAtsString& val)
 {
 	double ret = 0;
@@ -403,21 +373,6 @@ double CAtsValue::Dec(const CAtsString& val)
 
 	return ret;
 }
-
-/*****************************************************************************
- * Klasse:		CAtsExpMgr
- * Funktion:	Bin, Hex
- * Parameter:	val			Zahlenwert
- *				len			Minimale L鋘ge des Bin鋜werts
- * Return:		Wert als Bin鋜- oder Hexadezimalwert in Stringdarstellung
- * Beispiel:	Bin(9)		= "1001"
- *				Bin(9, 8)	= "00001001"
- *				Hex(128)	= "0x80"
- *				Hex(128, 4)	= "0x0080"
- *
- * Berechnet die Bin鋜- bzw. Hexadezimaldarstellung eines Wertes und gibt
- * sie als String zur點k.
- ****************************************************************************/
 CAtsString CAtsValue::Bin(int val, int len)
 {
 	CAtsString		strData;
@@ -445,10 +400,6 @@ CAtsString CAtsValue::Hex(int val, int len)
 	strData = Repeat( '0', len - strlen(hilf) );
 	return "0x" + strData + hilf;
 }
-
-//===============================================
-// 比较数据
-//===============================================
 BOOL CAtsValue::CmpData( CAtsValue *pValue )
 {
 	if( m_nType == ATSVAR_TYPE_INT )
@@ -470,12 +421,6 @@ BOOL CAtsValue::CmpData( CAtsValue *pValue )
 
 	return false;
 }
-
-//===============================================
-// 是不是是系统类型
-// String int double bool
-// 系统类型是进行值传递的
-//===============================================
 BOOL CAtsValue::IsSystemType( int nType )
 {
 	if( nType == ATSVAR_TYPE_STRING ||
@@ -517,8 +462,6 @@ CAtsValue & CAtsValue::operator = ( CAtsValue &Item )
 	}
 	else if( IsSystemType( m_nType ) )
 	{
-		//if( m_pObject )
-		//	m_pObject->CopyData( Item.m_pObject );
 	}
 	else
 		m_pObject = Item.m_pObject;
@@ -555,8 +498,6 @@ void CAtsValue::SetData( CAtsValue *pData )
 	}
 	else if( IsSystemType( m_nType ) )
 	{
-		//if( m_pObject )
-		//	m_pObject->CopyData( Item.m_pObject );
 	}
 	else
 		m_pObject = pData->m_pObject;

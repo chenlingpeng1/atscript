@@ -9,8 +9,6 @@
 const double ATS_PI	= 3.14159265358979323846;
 const double ATS_e	= 2.7182818284590452354;
 
-// 把一个值从堆中取出,并检测数据类型
-// 如是查变量,还要得到其内容
 #define	VAL_POP_CHECK_NUM_RETSTR( pvItem )	pvItem = ValPop();  \
 		if( !pvItem ) {m_bIsError=true;return false;} \
 		if( !TranvItemToData( pvItem ) ) {m_bIsError=true;return false;} \
@@ -70,14 +68,6 @@ void CAtsExpMgr::DetachList()
 	m_listValue.RemoveAll();
 }
 
-/*****************************************************************************
- * Klasse:		CAtsExpMgr
- * Funktion:	ToRad
- * Parameter:	x			Wert in Radian, Altgrad oder Neugrad
- * Return:		Wert in Radian
- *
- * Wandelt einen Werte vom aktuellen Kreismodus in Radian um.
- ****************************************************************************/
 double CAtsExpMgr::ToRad(double x)
 {
 	switch (modus)
@@ -87,15 +77,6 @@ double CAtsExpMgr::ToRad(double x)
 		default:	return x;
 	}
 }
-
-/*****************************************************************************
- * Klasse:		CAtsExpMgr
- * Funktion:	ToMod
- * Parameter:	x			Wert in Radian
- * Return:		Wert in Radian, Altgrad oder Neugrad
- *
- * Wendelt einen Wert von Radian in einen Wert im aktuellen Kreismodus um.
- ****************************************************************************/
 double CAtsExpMgr::ToMod(double x)
 {
 	switch (modus)
@@ -106,20 +87,8 @@ double CAtsExpMgr::ToMod(double x)
 	}
 }
 
-/*****************************************************************************
- * Klasse:		CAtsExpMgr
- * Funktion:	Reset
- * Parameter:	-
- * Return:		"Reset"
- *
- * Mit dieser Funktion werden alle gespeicherten Variablen und Funktionen
- * gel鰏cht und der Ursprungszustand der Klasse wieder hergestellt.
- ****************************************************************************/
 CAtsString CAtsExpMgr::Reset()
 {
-//	var.RemoveAll();
-//	usrfn.RemoveAll();
-
 	DetachList();
 
 	out			= DEC;
@@ -128,10 +97,6 @@ CAtsString CAtsExpMgr::Reset()
 	
 	return "Reset";
 }
-
-//=================================================
-// 判断是否出错了
-//=================================================
 bool CAtsExpMgr::TestError()
 {
 	if( m_bIsError )
@@ -139,10 +104,6 @@ bool CAtsExpMgr::TestError()
 
 	return true;
 }
-
-//========================================================
-// 计算表达试
-//========================================================
 BOOL CAtsExpMgr::Computer( CAtsString strExpress , CAtsValue *pValue )
 {
 	CAtsString		strData;
@@ -150,14 +111,10 @@ BOOL CAtsExpMgr::Computer( CAtsString strExpress , CAtsValue *pValue )
 	
 	if( !CalcExpress( strExpress ) )
 		return false;
-
-	// 从堆中取数据
 	if( m_listValue.GetCount() <= 0 )
 		return false;
 	else
 		pValueItem = ValTop();
-
-	// 如果是变量,则转为数据
 	if( pValueItem->m_nType == ATSVAR_TYPE_VAR )
 	{
 		if( !TranvItemToData( pValueItem ) ) 
@@ -171,10 +128,6 @@ BOOL CAtsExpMgr::Computer( CAtsString strExpress , CAtsValue *pValue )
 	*pValue = *pValueItem;
 	return true;
 }
-
-//========================================================
-// 判断条件语句是否成立
-//========================================================
 BOOL CAtsExpMgr::CheckCondition( CAtsString strExpress )
 {
 	CAtsString		strData;
@@ -184,14 +137,10 @@ BOOL CAtsExpMgr::CheckCondition( CAtsString strExpress )
 		return false;
 
 	CalcExpress( strExpress );
-
-	// 从堆中取数据
 	if( m_listValue.GetCount() <= 0 )
 		return false;
 	else
 		pValue = ValTop();
-
-	// 如果是变量,则转为数据
 	if( pValue->m_nType == ATSVAR_TYPE_VAR )
 	{
 		if( !TranvItemToData( pValue ) ) 
@@ -201,8 +150,6 @@ BOOL CAtsExpMgr::CheckCondition( CAtsString strExpress )
 			return false;
 		}
 	}
-
-	// 如果数据不为 0 , 都认为条件成立
 	if( atoi( pValue->GetStrData() ) )
 		return true;
 
@@ -255,16 +202,11 @@ BOOL CAtsExpMgr::IsNumberVal(CAtsString strValue)
 
 	return true;
 }
-
-//========================================================================
-// 进行表达试计算
-//========================================================================
 BOOL CAtsExpMgr::CalcExpress(LPCTSTR formel )
 {
 	int				nPrvPos = 0;
 	int				nCurPos = 0;
 	int				j = 0;
-
 	m_strData = formel;
 	if( m_strData.IsEmpty() )
 		return true;
@@ -289,19 +231,6 @@ BOOL CAtsExpMgr::CalcExpress(LPCTSTR formel )
 			ValPush( &vItem );
 		else if( vItem.m_nType == ATSVAR_TYPE_VAR )
 		{
-			// 是一个变量
-			/*if( m_pFEExt )
-			{
-				CAtsValue		vDataItem;
-				m_pFEExt->GetVarValue( vItem.m_strData , &vDataItem );
-				if( vDataItem.IsNum() )
-					ValPush( vDataItem.m_dData );
-				else
-					ValPush( vDataItem.m_strData );
-			}*/
-			// 显示直接放到堆中,只有在计算时才把它转为数据
-			// 其目的是为了在做为 Function 的参数时可能要还回数据,要让 function 知道
-			// 变量名
 			ValPush( strItemData , ATSVAR_TYPE_VAR );
 		}
 		else if( vItem.m_nType == ATSVAR_TYPE_STRING )
@@ -314,13 +243,9 @@ BOOL CAtsExpMgr::CalcExpress(LPCTSTR formel )
 				if( pTopOP && pTopOP->m_strName == "(" )
 				{
 					OpPop( true );
-			
-					// 结束括号判断上一个是不是 fun , 如果是,则一定要加入一个 value 
-					// 做为 function 的 Param, 内容是空的
 					if( OpTop() && OpTop()->m_nType == ATSOP_TYPE_SYSFUN ||
 						OpTop() && OpTop()->m_nType == ATSOP_TYPE_EXTFUN )
 					{
-						// 如果前一个值就是符号,则表括号中内容为空
 						if( m_nPrvItemType == FITEM_TYPE_OP )
 						{
 							CAtsValue		vValue;
@@ -335,7 +260,6 @@ BOOL CAtsExpMgr::CalcExpress(LPCTSTR formel )
 					pTopOP = OpTop();
 					if( pTopOP && pTopOP->m_strName == "," )
 					{
-						// 合并 Fun 参数, 合并所有的 ','
 						CAtsValue		vValue;
 						CAtsValue		*pTempVal = NULL;
 
@@ -372,14 +296,11 @@ BOOL CAtsExpMgr::CalcExpress(LPCTSTR formel )
 						OpPop(true);
 					else
 					{
-						// 如是还不是 "(" , 则出错
 						m_bIsError = true;
 						ASSERT( false );
 						return false;
 					}
 				}
-
-				// 结束括号判断上一个是不是 fun 
 				if( OpTop() && OpTop()->m_nType == ATSOP_TYPE_SYSFUN ||
 					OpTop() && OpTop()->m_nType == ATSOP_TYPE_EXTFUN )
 				{
@@ -390,8 +311,6 @@ BOOL CAtsExpMgr::CalcExpress(LPCTSTR formel )
 						return false;
 					}
 				}
-
-				// 结束括号后要执行马上可以执行的
 				CalMastTop();
 			}
 			else if( vItem.GetStrData() == "(" )
@@ -401,14 +320,12 @@ BOOL CAtsExpMgr::CalcExpress(LPCTSTR formel )
 			}
 			else if( vItem.GetStrData() == ",")
 			{
-				CHECK_PRVITEM_VALUE(vItem.GetStrData() );	// 前一个Item 一定要是value	
+				CHECK_PRVITEM_VALUE(vItem.GetStrData() );
 
 				CalTheSegment( CAtsBaseFun::GetOPLevel(ATSOP_TYPE_SEG , vItem.GetStrData() ) );
 				OpPush( ATSOP_TYPE_SEG , vItem.GetStrData() );
 			}
-			else if( strItemData.CompareNoCase("AND") == 0	||
-					 strItemData.CompareNoCase("OR") == 0	||
-					 strItemData.CompareNoCase("&&") == 0	||
+			else if( strItemData.CompareNoCase("&&") == 0	||
 					 strItemData.CompareNoCase("||") == 0	||
 					 strItemData == "=="	||
 					 strItemData == ">="	||
@@ -419,7 +336,7 @@ BOOL CAtsExpMgr::CalcExpress(LPCTSTR formel )
 					 strItemData == "<>"	||
 					 strItemData == "="	)
 			{
-				CHECK_PRVITEM_VALUE(strItemData);	// 前一个Item 一定要是value	
+				CHECK_PRVITEM_VALUE(strItemData);
 
 				CalTheSegment( CAtsBaseFun::GetOPLevel(ATSOP_TYPE_CHECK , strItemData) );
 				OpPush( ATSOP_TYPE_CHECK , strItemData);
@@ -427,39 +344,27 @@ BOOL CAtsExpMgr::CalcExpress(LPCTSTR formel )
 			else if( strItemData == "+" ||
 					 strItemData == "*" ||
 					 strItemData == "/" ||
-					 strItemData == "%" ||
-					 strItemData == "^" ||
-					 strItemData == "+=" ||
-					 strItemData == "-=" ||
-					 strItemData == "*=" ||
-					 strItemData == "%=" ||
-					 strItemData == "/=" )
+					 strItemData == "%" )
 				OpPush( ATSOP_TYPE_BINOP , strItemData);
 			else if( strItemData == "-" )
 			{
 				if( m_nPrvItemType == FITEM_TYPE_VALUE )
-					OpPush( ATSOP_TYPE_BINOP , strItemData );		// 减号
+					OpPush( ATSOP_TYPE_BINOP , strItemData );
 				else
-					OpPush(ATSOP_TYPE_SINGLEOP , "-" );				// 负号
+					OpPush(ATSOP_TYPE_SINGLEOP , "-" );	
 			}
-			else if( strItemData == "&" ||		// lOG 运算符
+			else if( strItemData == "&" ||	
 					 strItemData == "|" )
 				OpPush( ATSOP_TYPE_LOG , strItemData );
-			else if( strItemData == "AND"  ||
-					 strItemData == "OR"   ||
-					 strItemData == "&&"  ||
+			else if( strItemData == "&&"  ||
 					 strItemData == "||"   ||
 					 strItemData == "=="   ||
 					 strItemData == ">="   ||
 					 strItemData == ">"    ||
 					 strItemData == "<"    ||
 					 strItemData == "!="   ||
-					 strItemData == "<>"   ||
 					 strItemData == "<="   )
 				OpPush( ATSOP_TYPE_CHECK , strItemData);
-			else if( strItemData == "!" ||		// 单数据运算符
-					 strItemData == "~"  )
-				OpPush( ATSOP_TYPE_SINGLEOP , strItemData);
 			else if( strItemData == "++" )
 			{
 				CAtsObjPtr<CAtsValue>		a;
@@ -468,22 +373,13 @@ BOOL CAtsExpMgr::CalcExpress(LPCTSTR formel )
 			}
 			else
 			{
-				// 1. System Funktion
 				if( IsSysFunName( strItemData ) )   
 				{
-					OpPush( ATSOP_TYPE_SYSFUN , strItemData );
-					if( !NextVCharIs( nCurPos  , '('))
-					{
-						ASSERT( false );
-						m_bIsError = true;
-						return false;
-					}
+					//???
 				}
 				else
 				{
-					// 认为是扩展函数
 					OpPush( ATSOP_TYPE_EXTFUN , strItemData );
-					// 如果是函数, 下一个有效符号必须是 '('
 					if( !NextVCharIs( nCurPos , '('))
 					{
 						ASSERT( false );
@@ -491,29 +387,13 @@ BOOL CAtsExpMgr::CalcExpress(LPCTSTR formel )
 						m_bIsError = true;
 						return false;
 					}
-				}
-	/*??
-				//if (fkt.Lookup(strLowerName, j))		{  OpPush(j); break; }
-				// 2. Benutzerfunktion
-				if (usrfn.Lookup(name, hilf))			{ TxtPush(name); OpPush(STOP); OpPush(USRFN); break; }
-				// 3. Zuweisung
-				if ((i+1 < len) && (str[i+1] == '='))	{ TxtPush(name); break; }
-				// 4. Arithmetische Zuweisung (+=, ..)
-				if ((i+2 < len) && (str[i+2] == '='))	{ TxtPush(name); break; }
-				// 5. Externe Variable
-				if (extVar && extVar->Lookup(name, a))	{ ValPush(a); break; }
-				// 6. Interne Variable
-				if (var.Lookup(name, a))				{ ValPush(a); break; }
-				// 7. Fehler
-	*/			
+				}		
 			}
 		}
 		nPrvPos = nCurPos;
 	}	
 	if( m_bIsError )
 		return false;
-
-	// 计算到底, 到 '(' , ',' 停止
 	CalTheSegment(CAtsBaseFun::GetOPLevel(ATSOP_TYPE_SEG));
 
 	if( m_bIsError )
@@ -529,23 +409,14 @@ CAtsString CAtsExpMgr::GetErrorInfo()
 
 BOOL CAtsExpMgr::IsValidVarChar(char cChar)
 {
-	// 是字 A – Z, a – z, or 0 – 9
 	if( isalnum(cChar) )
 		return true;
-	
-	//是汉字
-	if( cChar & 0x80 ) 
-		return true;
-		
 	if( cChar == ']' || cChar == '[' )
 		return true;
-
 	if( cChar == '@' )
 		return true;
-
 	if( cChar == '_' )
 		return true;
-
 	return false;
 }
 
@@ -560,9 +431,6 @@ void CAtsExpMgr::RemoveAllSubStr(CAtsString &strString, CAtsString strItem )
 	}
 }
 
-//=========================================
-// 取出符号堆的最上一个
-//=========================================
 CAtsExpOpItem * CAtsExpMgr::OpPop(BOOL bAutoDel)					
 { 
 	if( m_listOP.GetCount() <= 0 )
@@ -580,72 +448,46 @@ CAtsExpOpItem * CAtsExpMgr::OpPop(BOOL bAutoDel)
 		return pItem;
 }
 
-//=========================================
-// 得到符号堆的最上一个
-//=========================================
 CAtsExpOpItem * CAtsExpMgr::OpTop()					
 { 
 	if( m_listOP.GetCount() <= 0 )
 		return NULL;
-
 	return (CAtsExpOpItem *)m_listOP.GetHead();
 }
 
-//=======================================
-// 向堆中加入一个符号
-//=======================================
 void CAtsExpMgr::OpPush(int nType , CAtsString strName , int nPos )
 {
 	CAtsExpOpItem *pItem  = new CAtsExpOpItem;
 	pItem->m_nType		= nType;
 	pItem->m_strName	= strName;
 	pItem->m_nPos		= nPos;
-
-	// 如果加进来的不是马上运行的符号,而前一个是双数操作符
-	// 则先运算前一个
 	if( pItem->m_nType == ATSOP_TYPE_BINOP && !pItem->IsMastCal() )
 	{
 		if( OpTop() && OpTop()->m_nType == ATSOP_TYPE_BINOP )
 			CalTop();
 	}
-
 	m_nPrvItemType = FITEM_TYPE_OP;
 	m_listOP.AddHead( pItem );
 }
 
-//=======================================
-// 向堆中放回原来的 OP 加入一个符号
-// 所以不修改 m_nPrvItemType
-//=======================================
 void CAtsExpMgr::OpPush_OldOP(CAtsExpOpItem *pOPItem)
 {
 	m_listOP.AddHead( pOPItem );
 }
 
-//=======================================
-// 向堆中加入一个符号
-//=======================================
 void CAtsExpMgr::OpPush(int oper)		
 { 
 	CAtsExpOpItem *pItem  = new CAtsExpOpItem;
 	pItem->m_nType   = ATSOP_TYPE_BINOP;
 	pItem->m_strName = (char)oper;
-
-	// 如果加进来的不是马上运行的符号,而前一个是双数操作符
-	// 则先运算前一个
 	if( pItem->m_nType == ATSOP_TYPE_BINOP && !pItem->IsMastCal() )
 	{
 		if( OpTop() && OpTop()->m_nType == ATSOP_TYPE_BINOP )
 			CalTop();
 	}
-
 	m_nPrvItemType = FITEM_TYPE_OP;
 	m_listOP.AddHead( pItem );					
 }
-
-//=======================================
-// 向堆中加入一个值
-//=======================================
 void CAtsExpMgr::ValPush(double x)		
 { 
 	CAtsValue		*pItem = new CAtsValue;
@@ -658,10 +500,6 @@ void CAtsExpMgr::ValPush(double x)
 	m_listValue.AddHead( pItem );
 	CalMastTop();	
 }
-
-//=======================================
-// 向堆中加入一个值
-//=======================================
 void CAtsExpMgr::ValPush(CAtsString strData, int nType )		
 { 
 	CAtsValue		*pItem = new CAtsValue;
@@ -673,10 +511,6 @@ void CAtsExpMgr::ValPush(CAtsString strData, int nType )
 	m_listValue.AddHead( pItem );
 	CalMastTop();	
 }
-
-//=======================================
-// 向堆中加入一个值
-//=======================================
 void CAtsExpMgr::ValPush(CAtsValue *pValue)		
 { 
 	CAtsValue		*pItem = new CAtsValue;
@@ -686,10 +520,6 @@ void CAtsExpMgr::ValPush(CAtsValue *pValue)
 	m_listValue.AddHead( pItem );
 	CalMastTop();	
 }
-
-//=========================================
-// 取出数据堆的最上一个
-//=========================================
 CAtsValue * CAtsExpMgr::ValPop()					
 { 
 	if( m_listValue.GetCount() <= 0 )
@@ -699,10 +529,6 @@ CAtsValue * CAtsExpMgr::ValPop()
 	m_listValue.RemoveHead();
 	return pItem;
 }
-
-//=========================================
-// 得到数据堆的最上一个
-//=========================================
 CAtsValue * CAtsExpMgr::ValTop()					
 { 
 	if( m_listValue.GetCount() <= 0 )
@@ -710,11 +536,6 @@ CAtsValue * CAtsExpMgr::ValTop()
 
 	return (CAtsValue *)m_listValue.GetHead();
 }
-
-//=====================================
-// 执行马上可以执行的运算, 1 级运算符
-// * , / , fun
-//=====================================
 void CAtsExpMgr::CalMastTop()		
 {
 	if( OpTop() && OpTop()->IsMastCal() )
@@ -723,23 +544,14 @@ void CAtsExpMgr::CalMastTop()
 			CalMastTop();
 	}
 }
-
-//=====================================
-// 一直计算到 '(' , ',' 为至
-//=====================================
 void CAtsExpMgr::CalTheSegment(int nCurOPLevel)		
 { 
 	while( CalTop( nCurOPLevel ) )
 		;
 }
-
-//================================================
-// 对是了上一个进行计算
-// 到 '(' , "," 时会停下,因为下面没例出 '(' , ','
-//================================================
 bool CAtsExpMgr::CalTop(int nCurOPLevel)		
 { 
-	CAtsObjPtr<CAtsValue>		a, b;	// 用 CAtsObjPtr 的好处就是会自动放开指针
+	CAtsObjPtr<CAtsValue>		a, b;
 	CAtsExpOpItem				*pOP	= NULL;
 	char						c;
 	BOOL						bCal = false;
@@ -753,25 +565,21 @@ bool CAtsExpMgr::CalTop(int nCurOPLevel)
 
 	if( nCurOPLevel > 0 && pOP->GetOPLevel() > nCurOPLevel )
 	{
-		//放回去
 		OpPush_OldOP(pOP);
 		return false;
 	}
 
 	if( pOP->m_nType == ATSOP_TYPE_SINGLEOP )
 	{
-		// 单数据运算符
 		c = pOP->m_strName.GetAt(0);
 		switch( c )
 		{
 			case '-': a = ValPop();		ValPush( -(a->GetdData()) );		bCal=true;	break;
-			case '!': a = ValPop();		ValPush(a->GetdData() == 0);		bCal=true;	break;	
-			case '~': a = ValPop();		ValPush(~(int) a->GetdData());		bCal=true;	break;			
+			case '!': a = ValPop();		ValPush(a->GetdData() == 0);		bCal=true;	break;			
 		}
 	}
 	else if( pOP->m_nType == ATSOP_TYPE_BINOP )
 	{
-		// 双数据运算符
 		if( pOP->m_strName == "+" )
 		{	
 			VAL_POP_CHECK_NUM_STR( a );
@@ -817,25 +625,16 @@ bool CAtsExpMgr::CalTop(int nCurOPLevel)
 	}
 	else if( pOP->m_nType == ATSOP_TYPE_LOG )
 	{
-		// 逻辑运算符
 		c = pOP->m_strName.GetAt(0);
 		if( pOP->m_strName == "&" )
 		{
 			a = ValPop();	b = ValPop();		ValPush((int) b->GetdData() & (int) a->GetdData() );		
 			bCal=true;
 		}
-		else if( pOP->m_strName == "|" )
-		{
-			a = ValPop();	b = ValPop();	
-			ValPush((int) b->GetdData() | (int) a->GetdData());	
-			bCal=true;
-		}
 	}
 	else if( pOP->m_nType == ATSOP_TYPE_CHECK )
 	{
-		// 判断运算符
-		if( pOP->m_strName.CompareNoCase( "AND" ) == 0  ||
-			pOP->m_strName.CompareNoCase( "&&" ) == 0  )
+		if( pOP->m_strName.CompareNoCase( "&&" ) == 0  )
 		{
 			VAL_POP_CHECK_NUM( a );
 			VAL_POP_CHECK_NUM( b );
@@ -907,17 +706,12 @@ bool CAtsExpMgr::CalTop(int nCurOPLevel)
 		}
 	}
 	else if( pOP->m_nType == ATSOP_TYPE_SYSFUN )
-	{
-		// 执行系统函数		
+	{	
 		bCal = ExecSysFun( pOP );
 	}
 	else if( pOP->m_nType == ATSOP_TYPE_EXTFUN )
 	{
-		// 执行扩展的函数
-		// 函数的后面必须有 (...)
 		CAtsParam		param;
-
-		// 函数必然会有一个 Value 做为其 Param 与其对应
 		a = ValPop();
 		if( !a )
 			return false;
@@ -929,7 +723,6 @@ bool CAtsExpMgr::CalTop(int nCurOPLevel)
 			m_strErrWord = a->GetStrData();
 			return false;
 		}
-		// 设置某一个参数的变量名
 		if( m_pFEExt->RunFun( pOP->m_strName , &param ) ) 
 			ValPush( &param.m_vReturn );
 		else
@@ -947,7 +740,6 @@ bool CAtsExpMgr::CalTop(int nCurOPLevel)
 	}
 	else
 	{
-		// 如果还不能,则放回去
 		OpPush_OldOP(pOP);
 		return  false;
 	}
@@ -955,57 +747,21 @@ bool CAtsExpMgr::CalTop(int nCurOPLevel)
 	return true;
 }
 
-//=============================================
-// 定义系统函数
-//=============================================
+
 void CAtsExpMgr::InitSysFun()
 {
 	m_listSysFunName.push_back( "int" );
-//	m_listSysFunName.push_back( "log" );
-//	m_listSysFunName.push_back( "pow" );
 }
-
-//=============================================
-// 执行系统函数
-//=============================================
 BOOL CAtsExpMgr::ExecSysFun( CAtsExpOpItem *pOP )
 {
 	BOOL						bCal = false;
-	CAtsObjPtr<CAtsValue>		a, b;	// 用 CAtsObjPtr 的好处就是会自动放开指针
+	CAtsObjPtr<CAtsValue>		a, b;
 
 	if( pOP->m_strName.CompareNoCase( "int" ) == 0 )
 	{
 		VAL_POP_CHECK_NUM( a );
 		ValPush((int)a->GetdData());	bCal=true;
 	}
-/*
-	else if( pOP->m_strName.CompareNoCase( "pow" ) == 0 )
-	{
-		a = ValPop();
-		CAtsString		strItem,strItem2;
-		CAtsParam	Param;
-		CAtsVarItem *pItem1;
-		CAtsVarItem *pItem2;
-		Param.LoadParamData( (LPCTSTR)a->GetStrData() );
-
-		pItem1 = Param.GetItem( 1 );
-		if( !TranvItemToData( &pItem1->m_vData ) ) 
-			return false;
-		pItem2 = Param.GetItem( 2 );
-		if( !TranvItemToData( &pItem2->m_vData ) ) 
-			return false;
-
-		ValPush(pow( pItem1->m_vData.GetdData() , pItem2->m_vData.GetdData() ));	
-		bCal=true;
-	}
-	else if( pOP->m_strName.CompareNoCase( "log" ) == 0 )
-	{
-		VAL_POP_CHECK_NUM( a );
-		ValPush(log(a->GetdData()));	
-		bCal=true;
-	}
-*/
-
 	return bCal;
 }
 
@@ -1028,10 +784,6 @@ BOOL CAtsExpMgr::GetElementItem(CAtsString &strStuff, CAtsString &strItem,CAtsSt
 	return TRUE;
 }
 
-//================================================
-// 读取一个数字
-//?? 在读数字时，会在最后多一个字符，如　1,  3)
-//================================================
 CAtsString CAtsExpMgr::ReadNumber(int &nPos )
 {
 	CAtsString hilf;
@@ -1041,36 +793,31 @@ CAtsString CAtsExpMgr::ReadNumber(int &nPos )
 	hilf += m_strData.GetAt(nPos);
 	for (nPos++ ; nPos < m_nStrLen ; nPos++)
 	{
-		c = m_strData.GetAt(nPos);					// Aktuelles Zeichen
+		c = m_strData.GetAt(nPos);	
 		hilf += c;
-		if (isxdigit(c))				continue;	// Hex, Bin oder Dec
-		if (c == '.')					continue;	// Nachkommastellen
+		if (isxdigit(c))				continue;	
+		if (c == '.')					continue;
 
 		switch (tolower(m_strData.GetAt(nPos-1)))
 		{
-		case 'e':	if (c == '+')		continue;	// Positiver Exponent
-					if (c == '-')		continue;	// Negativer Exponent
+		case 'e':	if (c == '+')		continue;
+					if (c == '-')		continue;
 					break;
-		case '0':	if (c == 'x')		continue;	// Hexadezimalzahl
+		case '0':	if (c == 'x')		continue;
 					break;
 		}
 
 		break;		// Zahl abgeschlossen
 	}
-
-	//nPos--;
-	//return CAtsValue::Dec(hilf);	
 	return hilf;
 }
 
-//===================================================
-// 取出一个字符,跳过一个空格
-//===================================================
+
 void CAtsExpMgr::GetChar(int& nPosition, char& cItem)
 {
 	do
 	{
-		nPosition ++;	// evtl. nach strCharacter
+		nPosition ++;
 		if (nPosition <= m_strData.GetLength())
 			cItem = m_strData.GetAt( nPosition - 1 );			
 		else 
@@ -1079,9 +826,6 @@ void CAtsExpMgr::GetChar(int& nPosition, char& cItem)
 	while (cItem == ' '); 
 }
 
-//================================================
-// 是否为系统函数
-//================================================
 BOOL CAtsExpMgr::IsSysFunName(CAtsString strName)
 {
 	int		nNum,nCount;
@@ -1095,9 +839,6 @@ BOOL CAtsExpMgr::IsSysFunName(CAtsString strName)
 	return false;
 }
 
-//========================================================
-// 读取一个 Item
-//========================================================
 BOOL CAtsExpMgr::GetItem( int &nPos , CAtsValue &vItem )
 {
 	if( nPos >= m_nStrLen )
@@ -1133,7 +874,6 @@ BOOL CAtsExpMgr::GetItem( int &nPos , CAtsValue &vItem )
 			nPos++;
 			if( nPos < m_nStrLen && m_strData.GetAt( nPos ) == '=' )
 			{
-				// 可能是 !=
 				strTemp = cFist;
 				strTemp = strTemp + m_strData.GetAt( nPos );
 				nPos++; 
@@ -1152,7 +892,6 @@ BOOL CAtsExpMgr::GetItem( int &nPos , CAtsValue &vItem )
 			nPos++;
 			if( nPos < m_nStrLen && m_strData.GetAt( nPos ) == '=' )
 			{
-				// 可能是  -= , *= , /=
 				strTemp = cFist;
 				strTemp = strTemp + "=";
 				nPos++; 
@@ -1165,7 +904,6 @@ BOOL CAtsExpMgr::GetItem( int &nPos , CAtsValue &vItem )
 			nPos++;
 			if( nPos < m_nStrLen && m_strData.GetAt( nPos ) == '=' )
 			{
-				// 可能是  &=
 				strTemp = cFist;
 				strTemp = strTemp + "=";
 				nPos++; 
@@ -1173,7 +911,6 @@ BOOL CAtsExpMgr::GetItem( int &nPos , CAtsValue &vItem )
 			}
 			else if( nPos < m_nStrLen && m_strData.GetAt( nPos ) == '&' )
 			{
-				// 可能是  &&
 				strTemp = cFist;
 				strTemp = strTemp + "&";
 				nPos++; 
@@ -1186,7 +923,6 @@ BOOL CAtsExpMgr::GetItem( int &nPos , CAtsValue &vItem )
 			nPos++;
 			if( nPos < m_nStrLen && m_strData.GetAt( nPos ) == '=' )
 			{
-				// 可能是  |=
 				strTemp = cFist;
 				strTemp = strTemp + "=";
 				nPos++; 
@@ -1194,7 +930,6 @@ BOOL CAtsExpMgr::GetItem( int &nPos , CAtsValue &vItem )
 			}
 			else if( nPos < m_nStrLen && m_strData.GetAt( nPos ) == '|' )
 			{
-				// 可能是  ||
 				strTemp = cFist;
 				strTemp = strTemp + "|";
 				nPos++; 
@@ -1207,7 +942,6 @@ BOOL CAtsExpMgr::GetItem( int &nPos , CAtsValue &vItem )
 			nPos++;
 			if( nPos < m_nStrLen && ( m_strData.GetAt( nPos ) == '=' || m_strData.GetAt( nPos ) == '+' ) )
 			{
-				// 可能是 += , ++
 				strTemp = cFist;
 				strTemp = strTemp + m_strData.GetAt( nPos );
 				nPos++; 
@@ -1221,7 +955,6 @@ BOOL CAtsExpMgr::GetItem( int &nPos , CAtsValue &vItem )
 			if( nPos < m_nStrLen && 
 				( m_strData.GetAt( nPos ) == '=' || m_strData.GetAt( nPos ) == '>' ) )
 			{
-				// 可能是 <= , <>
 				strTemp = cFist;
 				strTemp = strTemp + m_strData.GetAt( nPos );
 				nPos++; 
@@ -1231,7 +964,6 @@ BOOL CAtsExpMgr::GetItem( int &nPos , CAtsValue &vItem )
 				vItem.SetDataEx( cFist , ATSVAR_TYPE_OP );
 			break;
 		case '\"':
-			// 读取一个字符串
 			if( !ReadString( nPos , strTemp ) )
 			{
 				m_bIsError = true;
@@ -1240,19 +972,15 @@ BOOL CAtsExpMgr::GetItem( int &nPos , CAtsValue &vItem )
 			vItem.SetDataEx( strTemp , ATSVAR_TYPE_STRING );	
 			break;
 		case '@':
-			// 读取一个变量
 			strTemp = Read_FunName_Var( nPos );
 			vItem.SetDataEx( strTemp , ATSVAR_TYPE_VAR );	
 			break;
 		default: 
-			// 读取一个 FunName 或 变量名
 			strTemp = Read_FunName_Var( nPos );
 			if( nPos < m_nStrLen &&  m_strData.GetAt( nPos ) == '.' )
 			{
-				// 可能是 对象的 fun, 如: MyObj.funname
 				CAtsString		strSub;
 				nPos++;
-				
 				strSub = Read_FunName_Var( nPos );	
 				strTemp = strTemp + "." + strSub;
 				if( strSub.GetLength() <= 0 )
@@ -1276,9 +1004,6 @@ BOOL CAtsExpMgr::GetItem( int &nPos , CAtsValue &vItem )
 	return true;
 }
 
-//================================================
-// 读取一个变量或函数名
-//================================================
 CAtsString CAtsExpMgr::Read_FunName_Var(int &nPos )
 {
 	CAtsString		strName;
@@ -1290,8 +1015,6 @@ CAtsString CAtsExpMgr::Read_FunName_Var(int &nPos )
 			break;
 
 		c = m_strData.GetAt(nPos);
-
-		// 如果不是字有效的变量字符
 		if( IsValidVarChar(c) )
 		{
 			nPos++;
@@ -1303,11 +1026,6 @@ CAtsString CAtsExpMgr::Read_FunName_Var(int &nPos )
 	return strName;
 }
 
-
-
-//================================================
-// 读取一个字符串, 不含引号
-//================================================
 BOOL CAtsExpMgr::ReadString(int &nPos , CAtsString &strData)
 {
 	char		c;
@@ -1335,8 +1053,6 @@ BOOL CAtsExpMgr::ReadString(int &nPos , CAtsString &strData)
 		}
 		else if( c == '\\' )
 		{
-			//path: 如果是 '\' 则是转义字符
-			// 读 \ 后的一位数据
 			if( (nPos + 1) < m_nStrLen )
 			{
 				char x = m_strData.GetAt(nPos + 1);
@@ -1344,8 +1060,6 @@ BOOL CAtsExpMgr::ReadString(int &nPos , CAtsString &strData)
 
 				if( x == 'x' )
 				{
-					//path: \xAA
-					// \x 后面要读取两位数据
 					if( ( nPos + 2 ) < m_nStrLen )
 					{
 						c = CAtsBaseFun::GetEscapeChar_x(m_strData.GetAt(nPos+1),m_strData.GetAt(nPos+2));
@@ -1353,7 +1067,6 @@ BOOL CAtsExpMgr::ReadString(int &nPos , CAtsString &strData)
 					}
 					else
 					{
-						// 转义字符后没数据了,则出错
 						ASSERT( false );
 						return false;
 					}
@@ -1363,7 +1076,6 @@ BOOL CAtsExpMgr::ReadString(int &nPos , CAtsString &strData)
 			}
 			else
 			{
-				// 转义字符后没数据了,则出错
 				ASSERT( false );
 				return false;
 			}
@@ -1375,18 +1087,12 @@ BOOL CAtsExpMgr::ReadString(int &nPos , CAtsString &strData)
 	return false;
 }
 
-//================================================
-// 设置 vItem 为数据内容
-//================================================
 BOOL CAtsExpMgr::TranvItemToData(CAtsValue *pvItem)
 {
 	if( pvItem->m_nType == ATSVAR_TYPE_VAR )
 	{
-		// 如果是表达式中的变量
 		if( GetVarValue( pvItem->GetStrData() , pvItem ) )
 			return true;
-
-		// 是一个变量
 		if( m_pFEExt )
 		{
 			m_pFEExt->GetVarValue( pvItem->GetStrData() , pvItem );
@@ -1396,10 +1102,6 @@ BOOL CAtsExpMgr::TranvItemToData(CAtsValue *pvItem)
 	}
 	return true;
 }
-
-//============================================
-// 根据变量名得到变量的值
-//============================================
 BOOL CAtsExpMgr::GetVarValue( CAtsString strVarName , CAtsValue *pValue )
 {
 	CAtsVarItem		*pVarItem = NULL;
@@ -1411,10 +1113,6 @@ BOOL CAtsExpMgr::GetVarValue( CAtsString strVarName , CAtsValue *pValue )
 	pVarItem->GetValueData( pValue );
 	return true;
 }
-
-//============================================
-// 根据变量名得到变量的值
-//============================================
 CAtsVarItem * CAtsExpMgr::GetVarItem( CAtsString strVarName )
 {
 	CAtsVarItem		*pVarItem = NULL;
@@ -1429,10 +1127,6 @@ CAtsVarItem * CAtsExpMgr::GetVarItem( CAtsString strVarName )
 
 	return NULL;
 }
-
-//================================================
-// 判断下一个有效字符是不是 citem
-//================================================
 BOOL CAtsExpMgr::NextVCharIs(int nBeginPos , char cItem )
 {
 	int			nPos = nBeginPos;
@@ -1444,8 +1138,6 @@ BOOL CAtsExpMgr::NextVCharIs(int nBeginPos , char cItem )
 			break;
 
 		c = m_strData.GetAt(nPos);
-
-		// 如果不是字有效的变量字符
 		if( c == ' ' )
 			nPos++;
 		else if( cItem == c )
@@ -1455,11 +1147,6 @@ BOOL CAtsExpMgr::NextVCharIs(int nBeginPos , char cItem )
 	}
 	return false;
 }
-
-//========================================================
-// 生成一个 Functoin 的Param
-// 计算出来的内容不转数为数据,因为要作为function 的参数
-//========================================================
 BOOL CAtsExpMgr::CmputerParam( CAtsString strExpress , CAtsParam *param )
 {
 	CAtsString		strData;
@@ -1470,8 +1157,6 @@ BOOL CAtsExpMgr::CmputerParam( CAtsString strExpress , CAtsParam *param )
 
 	if( !CalcExpress( strExpress ) )
 		return false;
-
-	// 从堆中取数据
 	pValue = ValPop();
 	if( pValue && pValue->m_nType == ATSVAR_TYPE_PARAM )
 	{
@@ -1492,26 +1177,22 @@ BOOL CAtsExpMgr::CmputerParam( CAtsString strExpress , CAtsParam *param )
 	}
 	return true;
 }
-
 BOOL CAtsExpMgr::SetVar(LPCTSTR sName , LPCTSTR strData , int nType )
 {
 	CAtsVarItem		*pVarItem = NULL;
 	CAtsString		strName = sName;
- 
 	pVarItem = GetVarItem( sName );
 	if( pVarItem )
 	{
 		pVarItem->m_vData.SetData( strData );
 		return true;
 	}
-
 	pVarItem = new CAtsVarItem;
 	pVarItem->m_strName = strName;
 	pVarItem->m_vData.m_nType = nType;
 	pVarItem->m_vData.SetData( strData );
 	pVarItem->AddRef();
 	m_listUserVar.AddTail( pVarItem );
-
 	return true;
 }
 
@@ -1519,20 +1200,17 @@ BOOL CAtsExpMgr::SetVar(LPCTSTR sName , double nData , int nType )
 {
 	CAtsVarItem		*pVarItem = NULL;
 	CAtsString		strName = sName;
- 
 	pVarItem = GetVarItem( sName );
 	if( pVarItem )
 	{
 		pVarItem->m_vData.SetData( nData );
 		return true;
 	}
-
 	pVarItem = new CAtsVarItem;
 	pVarItem->m_strName = strName;
 	pVarItem->m_vData.m_nType = nType;
 	pVarItem->m_vData.SetData( nData );
 	pVarItem->AddRef();
 	m_listUserVar.AddTail( pVarItem );
-	
 	return true;
 }

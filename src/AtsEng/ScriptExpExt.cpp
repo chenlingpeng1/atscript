@@ -17,10 +17,6 @@ CScriptExpExt::CScriptExpExt()
 CScriptExpExt::~CScriptExpExt()
 {
 }
-
-//============================================
-// 根据变量名得到变量的值
-//============================================
 BOOL CScriptExpExt::GetVarValue( CAtsString strVarName , CAtsValue *pValue )
 {
 	CAtsVarItem		*pVarItem = NULL;
@@ -35,18 +31,10 @@ BOOL CScriptExpExt::GetVarValue( CAtsString strVarName , CAtsValue *pValue )
 	pVarItem->GetValueData( pValue );
 	return true;
 }
-
-//===================================================
-// 执行一个 function
-//===================================================
 BOOL CScriptExpExt::RunFun( CAtsString strFunName , CAtsParam *pParam )
 {
 	return m_pEgnine->RunFun( strFunName , pParam , m_pSegIns );
 }
-
-//============================================
-// 判断是否为变量名
-//============================================
 BOOL CScriptExpExt::IsVar( CAtsString strName )
 {
 	if( m_pEgnine->IsVar( strName , m_pSegIns ) )
@@ -54,10 +42,6 @@ BOOL CScriptExpExt::IsVar( CAtsString strName )
 
 	return false;
 }
-
-//============================================
-// 判断是否为FunctionName
-//============================================
 BOOL CScriptExpExt::IsFunction( CAtsString strName )
 {
 	return false;
